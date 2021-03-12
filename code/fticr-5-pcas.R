@@ -119,6 +119,99 @@ ggbiplot(pca, obs.scale = 1, var.scale = 1,
   theme_er()+
   scale_color_manual(values = rev(PNWColors::pnw_palette("Bay", 3)))
 
+# Footslope canopy vs open ----
+relabund_pca =
+  fticr_water_relabund %>% 
+  filter(slopepos == "Footslope") %>% 
+  ungroup %>% 
+  dplyr::select(-c(counts, totalcounts)) %>% 
+  pivot_wider(names_from = "Class", values_from = "relabund") %>% 
+  replace(is.na(.),0)  
+#dplyr::select(-1)
+
+num = 
+  relabund_pca %>% 
+  dplyr::select(c(aliphatic, aromatic, `condensed aromatic`, `unsaturated/lignin`))
+
+grp = 
+  relabund_pca %>% 
+  dplyr::select(-c(aliphatic, aromatic, `condensed aromatic`, `unsaturated/lignin`)) %>% 
+  dplyr::mutate(row = row_number())
+
+pca = prcomp(num, scale. = T)
+
+ggbiplot(pca, obs.scale = 1, var.scale = 1,
+         groups = as.character(grp$cover_type), 
+         ellipse = TRUE, circle = FALSE, var.axes = TRUE) +
+  geom_point(size=4,stroke=1, aes(color = groups))+
+  xlim(-5,5)+
+  ylim(-3.5,5)+
+  NULL+
+  theme_er()+
+  scale_color_manual(values = rev(PNWColors::pnw_palette("Bay", 2)))
+
+# Low Backslope (canopy vs open) ----
+relabund_pca =
+  fticr_water_relabund %>% 
+  filter(slopepos == "Low Backslope") %>% 
+  ungroup %>% 
+  dplyr::select(-c(counts, totalcounts)) %>% 
+  pivot_wider(names_from = "Class", values_from = "relabund") %>% 
+  replace(is.na(.),0)  
+#dplyr::select(-1)
+
+num = 
+  relabund_pca %>% 
+  dplyr::select(c(aliphatic, aromatic, `condensed aromatic`, `unsaturated/lignin`))
+
+grp = 
+  relabund_pca %>% 
+  dplyr::select(-c(aliphatic, aromatic, `condensed aromatic`, `unsaturated/lignin`)) %>% 
+  dplyr::mutate(row = row_number())
+
+pca = prcomp(num, scale. = T)
+
+ggbiplot(pca, obs.scale = 1, var.scale = 1,
+         groups = as.character(grp$cover_type), 
+         ellipse = TRUE, circle = FALSE, var.axes = TRUE) +
+  geom_point(size=4,stroke=1, aes(color = groups))+
+  xlim(-5,5)+
+  ylim(-3.5,5)+
+  NULL+
+  theme_er()+
+  scale_color_manual(values = rev(PNWColors::pnw_palette("Bay", 2)))
+
+# Backslope (canopy vs open) ----
+relabund_pca =
+  fticr_water_relabund %>% 
+  filter(slopepos == "Backslope") %>% 
+  ungroup %>% 
+  dplyr::select(-c(counts, totalcounts)) %>% 
+  pivot_wider(names_from = "Class", values_from = "relabund") %>% 
+  replace(is.na(.),0)  
+#dplyr::select(-1)
+
+num = 
+  relabund_pca %>% 
+  dplyr::select(c(aliphatic, aromatic, `condensed aromatic`, `unsaturated/lignin`))
+
+grp = 
+  relabund_pca %>% 
+  dplyr::select(-c(aliphatic, aromatic, `condensed aromatic`, `unsaturated/lignin`)) %>% 
+  dplyr::mutate(row = row_number())
+
+pca = prcomp(num, scale. = T)
+
+ggbiplot(pca, obs.scale = 1, var.scale = 1,
+         groups = as.character(grp$cover_type), 
+         ellipse = TRUE, circle = FALSE, var.axes = TRUE) +
+  geom_point(size=4,stroke=1, aes(color = groups))+
+  xlim(-5,5)+
+  ylim(-3.5,5)+
+  NULL+
+  theme_er()+
+  scale_color_manual(values = rev(PNWColors::pnw_palette("Bay", 2)))
+
 # TOOL vs. HEAL (con, organic only) ----
 relabund_pca =
   fticr_water_relabund %>% 
@@ -149,7 +242,6 @@ ggbiplot(pca, obs.scale = 1, var.scale = 1,
   NULL+
   theme_er()+
   scale_color_manual(values = rev(PNWColors::pnw_palette("Bay", 3)))
-
 
 # HEAL con vs ft  ----
 relabund_pca =
