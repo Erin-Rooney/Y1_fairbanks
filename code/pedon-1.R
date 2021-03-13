@@ -7,7 +7,7 @@ library(reshape)
 
 
 #load csv
-pedon <- read.csv("Pedon depths1.csv", stringsAsFactors=FALSE)
+pedon <- read.csv("processed/Y1_pedology_noextras.csv", stringsAsFactors=FALSE)
 
 #look at first several lines of imported file
 head(pedon)
@@ -28,10 +28,12 @@ print(pedon)
 #convert to apq object "soil profile collection"
 depths(pedon) <- id ~ top + bottom
 
+
 #check the new class
 str(pedon)
 class(pedon)
 summary(pedon)
 
 #plot
-plot(pedon, name = 'horizon', color = 'soilcolor')
+plot(pedon, name = 'horizon', color = 'soilcolor') 
+

@@ -34,8 +34,8 @@ fticr_water_relabund =
   dplyr::mutate(totalcounts = sum(counts)) %>% 
   ungroup() %>% 
   mutate(relabund = (counts/totalcounts)*100,
-         relabund = round(relabund, 2)) 
-#mutate(Material = factor(Material, levels = c("Organic", "Upper Mineral", "Lower Mineral")))
+         relabund = round(relabund, 2)) %>% 
+mutate(slopepos = factor(slopepos, levels = c("Backslope", "Low Backslope", "Footslope")))
 
 fticr_water_relabund_arom = 
   fticr_water %>% 
@@ -102,7 +102,9 @@ fticr_water_relabund =
   dplyr::mutate(totalcounts = sum(counts)) %>% 
   ungroup() %>% 
   mutate(relabund = (counts/totalcounts)*100,
-         relabund = round(relabund, 2)) 
+         relabund = round(relabund, 2)) %>% 
+  mutate(slopepos = factor(slopepos, levels = c("Backslope", "Low Backslope", "Footslope")))
+
 #mutate(Material = factor(Material, levels = c("Organic", "Upper Mineral", "Lower Mineral")))
 ## use this file (relabund by sample) for PCA and PERMANOVA
 
@@ -129,6 +131,8 @@ fticr_water_relabund_summarized %>%
   ggplot(aes(x = cover_type, y = relabund))+
   geom_bar(aes(fill = Class), stat = "identity")+
   facet_wrap(slopepos ~ .)+
+  labs(x = "Cover Type", 
+       y = "Relative Abundance")+
   #geom_text(data = label, aes(x = Trtmt, y = y, label = label), size = 8, color = "white")+
   theme_er()+
   scale_fill_manual(values = rev(pnw_palette("Sunset",4)))
