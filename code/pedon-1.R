@@ -7,7 +7,7 @@ library(reshape)
 
 
 #load csv
-pedon <- read.csv("processed/Y1_pedology_noextras.csv", stringsAsFactors=FALSE)
+pedon <- read.csv("processed/metadata_Y1_munsell.csv", stringsAsFactors=FALSE)
 
 #look at first several lines of imported file
 head(pedon)
