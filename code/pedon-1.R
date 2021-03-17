@@ -1,8 +1,8 @@
 library(aqp)
-library(plyr)
+#library(plyr)
 library(RColorBrewer)
 library(latticeExtra)
-library(plyr)
+#library(plyr)
 library(reshape)
 
 
@@ -31,6 +31,7 @@ depths(pedon) <- id ~ top + bottom
 
 #check the new class
 str(pedon)
+
 class(pedon)
 summary(pedon)
 
