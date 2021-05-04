@@ -219,3 +219,4 @@ fticr_water_ftc_loss_common %>%
   facet_grid(Material ~ Site)+
   theme_er() +
   scale_color_manual (values = rev(soil_palette("redox", 2)))
+
