@@ -14,9 +14,9 @@ fticr_meta_water = read.csv("fticr_meta_water.csv")
 ### create an index combining them
 
 
-fticr_data_water_summarized = 
-  fticr_data_water %>% 
-  distinct(ID, slopepos, cover_type, plot, formula) %>% mutate(presence = 1)
+# fticr_data_water_summarized = 
+#   fticr_data_water %>% 
+#   distinct(ID, slopepos, cover_type, plot, formula) %>% mutate(presence = 1)
 
 #2. Calculate Relabund
 ## aromatic rel_abund
@@ -27,10 +27,10 @@ fticr_water_relabund =
   fticr_data_water %>% 
   left_join(select(fticr_meta_water, formula, Class), by = "formula") %>% 
   ## create a column for group counts
-  group_by(slopepos, cover_type, plot, Class) %>% 
+  group_by(ID, slopepos, cover_type, plot, Class) %>% 
   dplyr::summarize(counts = n()) %>% 
   ## create a column for total counts
-  group_by(slopepos, cover_type, plot) %>%
+  group_by(ID, slopepos, cover_type, plot) %>%
   dplyr::mutate(totalcounts = sum(counts)) %>% 
   ungroup() %>% 
   mutate(relabund = (counts/totalcounts)*100,
@@ -49,44 +49,28 @@ fticr_water_relabund_summarized =
 
 
 
-#2c. aromatic relabund --- something is going wrong.
-
-fticr_water_relabund_arom = 
-  fticr_water_relabund %>% 
-  left_join(select(fticr_meta_water, formula, AImod, HC, OC), by = "formula") %>% 
-  dplyr::mutate(aromatic_col = case_when(AImod>0.5 ~ "aromatic",
-                                         (HC<2.0 & HC>1.5) ~ "aliphatic"),
-                aromatic_col = if_else(is.na(aromatic_col), "other", aromatic_col)) %>% 
-  ## create a column for group counts
-  group_by(slopepos, cover_type, plot, aromatic_col) %>% 
-  dplyr::summarize(counts = n()) %>% 
-  ## create a column for total counts
-  group_by(slopepos, cover_type, plot) %>%
-  dplyr::mutate(totalcounts = sum(counts)) %>% 
-  ungroup() %>% 
-  mutate(relabund = (counts/totalcounts)*100,
-         relabund = round(relabund, 2))
+#2c. aromatic relabund --- do this later.
 
 
 ## plot relabund of aromatic
 
-fticr_water_relabund_arom %>% 
-  filter(aromatic_col %in% "aromatic") %>% 
-  ggplot(aes(x = slopepos, y = relabund, color = slopepos, shape = slopepos))+
-  #geom_boxplot()+
-  geom_point()+
-  facet_grid(cover_type ~ .)+
-  theme_er()
+# fticr_water_relabund_arom %>% 
+#   filter(aromatic_col %in% "aromatic") %>% 
+#   ggplot(aes(x = slopepos, y = relabund, color = slopepos, shape = slopepos))+
+#   #geom_boxplot()+
+#   geom_point()+
+#   facet_grid(cover_type ~ .)+
+#   theme_er()
 
-fticr_water_relabund_arom %>% 
-  #mutate(Material = factor (Material, levels = c("Organic", "Upper Mineral", "Lower Mineral"))) %>% 
-  filter(aromatic_col %in% "aromatic") %>% 
-  ggplot(aes(x = slopepos, y = relabund, color = slopepos, shape = slopepos, size = 4))+
-  #geom_boxplot()+
-  geom_point(position = position_dodge(width = 0.3))+
-  facet_grid(cover_type ~ .)+
-  scale_color_manual(values = rev(PNWColors::pnw_palette("Lake", 3)))+
-  theme_er()
+# fticr_water_relabund_arom %>% 
+#   #mutate(Material = factor (Material, levels = c("Organic", "Upper Mineral", "Lower Mineral"))) %>% 
+#   filter(aromatic_col %in% "aromatic") %>% 
+#   ggplot(aes(x = slopepos, y = relabund, color = slopepos, shape = slopepos, size = 4))+
+#   #geom_boxplot()+
+#   geom_point(position = position_dodge(width = 0.3))+
+#   facet_grid(cover_type ~ .)+
+#   scale_color_manual(values = rev(PNWColors::pnw_palette("Lake", 3)))+
+#   theme_er()
 ## potential idea: do ANOVA with x = site, and report p-values in the graph
 ## then do ANOVA with x = trtmt for each site, and report sig. as asterisks
 
@@ -213,9 +197,9 @@ write.csv(relabund_table_with_asterisk, "output/canopy_aovstats.csv", row.names 
 ## step 1: prepare the data, combine mean +/- se
 ## unicode "\u00b1" gives plus-minus symbol
 
-relabund_table_open = 
+relabund_table_covertype = 
   fticr_water_relabund_summarized %>% 
-  filter(cover_type == "Open") %>% 
+  #filter(cover_type == "Open") %>% 
   mutate(summary = paste(relabundance, "\u00b1", se)) %>% 
   dplyr::select(-relabundance, -se)
 
@@ -231,7 +215,8 @@ fit_aov_open = function(dat){
     dplyr::select(asterisk) %>% # we need only the asterisk column
     # two steps below, we need to left-join. 
     # set Trtmt = "FTC" so the asterisks will be added to the FTC values only
-    mutate(cover_type = "Open")   
+    #mutate(cover_type = "Open")   
+    force()
   
 }
 
@@ -239,16 +224,16 @@ fit_aov_open = function(dat){
 ## step 3: run the fit_anova function 
 ## do this on the original relabund file, because we need all the reps
 
-relabund_asterisk_open = 
+relabund_asterisk_covertype = 
   fticr_water_relabund %>% 
-  filter(cover_type == "Open") %>% 
-  group_by(Class) %>% 
+  #filter(cover_type == "Open") %>% 
+  group_by(cover_type, Class) %>% 
   do(fit_aov_open(.))
 
 ## step 4: combine the summarized values with the asterisks
-relabund_table_with_asterisk_open = 
-  relabund_table_open %>% 
-  left_join(relabund_asterisk_open) %>%
+relabund_table_with_asterisk_covertype = 
+  relabund_table_covertype %>% 
+  left_join(relabund_asterisk_covertype) %>%
   # combine the values with the asterisk notation
   mutate(value = paste(summary, asterisk),
          # this will also add " NA" for the blank cells
@@ -257,7 +242,7 @@ relabund_table_with_asterisk_open =
   dplyr::select(-summary, -asterisk) %>% 
   pivot_wider(names_from = "slopepos", values_from = "value")
 
-relabund_table_with_asterisk_open %>% knitr::kable() # prints a somewhat clean table in the console
+relabund_table_with_asterisk_covertype %>% knitr::kable() # prints a somewhat clean table in the console
 
 write.csv(relabund_table_with_asterisk_open, "output/slopepos_aovstats.csv", row.names = FALSE)
 
