@@ -51,9 +51,9 @@ ggplot(fticr_water_nosc, aes(NOSC, color = cover_type, fill = cover_type)) +
 
 # NOSC by compound class
 fticr_water_nosc %>% 
-  #filter(site == "catalina") %>% 
+  mutate(slopepos = factor (slopepos, levels = c("Footslope", "Low Backslope","Backslope"))) %>% 
   ggplot(aes(NOSC, color = slopepos, fill = slopepos)) +
-  geom_histogram(alpha = 0.3, position = "identity", binwidth = 0.1) +
+  geom_histogram(alpha = 0.6, position = "identity", binwidth = 0.1) +
   geom_boxplot(aes(y = 800), width = 100, fill = NA)+
   #facet_grid(Material ~ .) +
   theme_er() +
