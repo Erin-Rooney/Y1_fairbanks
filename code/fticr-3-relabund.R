@@ -220,31 +220,41 @@ fit_aov_open = function(dat){
   
 }
 
+fit_hsd = function(dat){
+  a = aov(relabund ~ slopepos, data = dat)
+  h = HSD.test(a, "slopepos")
+  h$groups %>% mutate(slopepos = row.names(.)) %>% 
+    rename(label = groups) %>%  
+    dplyr::select(slopepos, label)
+}
+
 
 ## step 3: run the fit_anova function 
 ## do this on the original relabund file, because we need all the reps
 
-relabund_asterisk_covertype = 
+relabund_hsd_covertype = 
   fticr_water_relabund %>% 
   #filter(cover_type == "Open") %>% 
   group_by(cover_type, Class) %>% 
-  do(fit_aov_open(.))
+  do(fit_hsd(.))
 
 ## step 4: combine the summarized values with the asterisks
-relabund_table_with_asterisk_covertype = 
+relabund_table_with_hsd_covertype = 
   relabund_table_covertype %>% 
-  left_join(relabund_asterisk_covertype) %>%
-  # combine the values with the asterisk notation
-  mutate(value = paste(summary, asterisk),
+  left_join(relabund_hsd_covertype) %>%
+  # combine the values with the label notation
+  mutate(value = paste(summary, label),
          # this will also add " NA" for the blank cells
          # use str_remove to remove the string
-         value = str_remove(value, " NA")) %>% 
-  dplyr::select(-summary, -asterisk) %>% 
-  pivot_wider(names_from = "slopepos", values_from = "value")
+         #value = str_remove(value, " NA")
+         ) %>% 
+  dplyr::select(-summary, -label) %>% 
+  pivot_wider(names_from = "slopepos", values_from = "value") %>% 
+  force()
 
-relabund_table_with_asterisk_covertype %>% knitr::kable() # prints a somewhat clean table in the console
+relabund_table_with_hsd_covertype %>% knitr::kable() # prints a somewhat clean table in the console
 
-write.csv(relabund_table_with_asterisk_open, "output/slopepos_aovstats.csv", row.names = FALSE)
+write.csv(relabund_table_with_hsd_covertype, "output/slopepos_hsdstats.csv", row.names = FALSE)
 
 
 # Site Position (CANOPY ONLY)
