@@ -66,5 +66,20 @@ dbh = tree_data_table %>%
   #facet_grid(.~slopepos)+
   NULL
 
-ggsave("output/dbh.tiff", plot = dbh, height = 8, width = 5)
-ggsave("output/dbh.jpeg", plot = dbh, height = 8, width = 5)
+ggsave("output/dbh.tiff", plot = dbh, height = 5, width = 4)
+ggsave("output/dbh.jpeg", plot = dbh, height = 5, width = 4)
+
+
+
+tree_data_stats =
+  soil_data %>% 
+  filter(cover_type %in% "Canopy") %>% 
+  select(c(slopepos, DBH..cm.)) %>% 
+  group_by(slopepos)  
+
+dbh_aov <- aov(DBH..cm. ~ slopepos, data = tree_data_stats)
+summary.aov(dbh_aov)
+
+dbh_hsd = HSD.test(dbh_aov, "slopepos")
+print(dbh_hsd)
+

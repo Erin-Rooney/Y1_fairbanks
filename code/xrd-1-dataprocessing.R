@@ -65,6 +65,28 @@ xrd_data_tableanalysis =
   na.omit()
   #dplyr::select(-mean, -se)
 
+
+xrd_stats = 
+  xrd_data_tableanalysis =
+  xrd_data_processed %>% 
+  dplyr::mutate(quartz = as.numeric(quartz),
+                albite = as.numeric(albite),
+                anorthite = as.numeric(anorthite),
+                microcline = as.numeric(microcline),
+                chlorite = as.numeric(chlorite),
+                mica = as.numeric(mica),
+                hornblende = as.numeric(hornblende),
+                ankerite = as.numeric(ankerite),
+                rwp = as.numeric(rwp),
+                feldspar_decimal = as.numeric(feldspar_decimal),
+  ) %>% 
+  mutate(feldspar = (feldspar_decimal * 100)) %>% 
+  select(-c(quartz_stdev, albite_stdev, anorthite_stdev, microcline_stdev,
+            chlorite_stdev, mica_stdev, hornblende_stdev, ankerite_stdev, feldspar_decimal)) %>% 
+  pivot_longer(cols = c(quartz, albite, anorthite, microcline, chlorite, mica, hornblende,
+                        ankerite, rwp, feldspar), names_to = "mineral", values_to = "abundance") %>% 
+  na.omit()
+
 xrd_slope = 
   xrd_data_tableanalysis %>% 
   mutate(slopepos = recode(slopepos, "low_backslope" = 'low backslope')) %>% 
@@ -126,4 +148,128 @@ ggsave("output/xrd_slope.jpeg", plot = xrd_slope, height = 6, width = 10)
 #     )+
 #     NULL
   
+# 5. XRD stats ------------------------
+
+library(nlme)
+
+
+xrd_interaction = lme(abundance ~ slopepos*covertype, random = ~1|mineral, na.action = na.omit, data = xrd_stats)
+                      
+summary(xrd_interaction)
+print(xrd_interaction)
+anova(xrd_interaction)
+
+#slope pos comparison
+
+fit_aov = function(dat){
   
+  aov(abundance ~ slopepos, data = dat) %>% 
+    broom::tidy() %>% # convert to clean dataframe
+    rename(pvalue = `p.value`) %>% 
+    filter(term == "slopepos") %>% 
+    mutate(asterisk = case_when(pvalue <= 0.05 ~ "*")) %>% 
+    dplyr::select(asterisk) %>% # we need only the asterisk column
+    # two steps below, we need to left-join. 
+    # set Trtmt = "FTC" so the asterisks will be added to the FTC values only
+    #mutate(cover_type = "Open")   
+    force()
+  
+}
+
+fit_hsd = function(dat){
+  a = aov(abundance ~ slopepos, data = dat)
+  h = HSD.test(a, "slopepos")
+  h$groups %>% mutate(slopepos = row.names(.)) %>% 
+    rename(label = groups) %>%  
+    dplyr::select(slopepos, label)
+}
+
+## step 3: run the fit_anova function 
+## do this on the original relabund file, because we need all the reps
+
+xrd_hsd_all = 
+  xrd_stats %>% 
+  #filter(cover_type == "Open") %>% 
+  group_by(covertype, mineral) %>% 
+  do(fit_hsd(.))
+
+xrd_table_with_hsd_covertype = 
+  xrd_data_tableanalysis %>% 
+  left_join(xrd_hsd_all) %>%
+  # combine the values with the label notation
+  mutate(value = paste(summary, label),
+         # this will also add " NA" for the blank cells
+         # use str_remove to remove the string
+         #value = str_remove(value, " NA")
+  ) %>% 
+  dplyr::select(-summary, -label) %>% 
+  pivot_wider(names_from = "slopepos", values_from = "value") %>% 
+  force()
+
+xrd_table_with_hsd_covertype %>% knitr::kable() # prints a somewhat clean table in the console
+
+write.csv(xrd_table_with_hsd_covertype, "output/xrd_table_with_hsd_covertype.csv", row.names = FALSE)
+
+xrd_hsd_all %>% knitr::kable() # prints a somewhat clean table in the console
+
+write.csv(xrd_hsd_all, "output/xrd_hsd_all.csv", row.names = FALSE)
+
+######################
+
+
+
+# cover type comparison
+
+fit_aov = function(dat){
+  
+  aov(abundance ~ covertype, data = dat) %>% 
+    broom::tidy() %>% # convert to clean dataframe
+    rename(pvalue = `p.value`) %>% 
+    filter(term == "covertype") %>% 
+    mutate(asterisk = case_when(pvalue <= 0.05 ~ "*")) %>% 
+    dplyr::select(asterisk) %>% # we need only the asterisk column
+    # two steps below, we need to left-join. 
+    # set Trtmt = "FTC" so the asterisks will be added to the FTC values only
+    #mutate(cover_type = "Open")   
+    force()
+  
+}
+
+fit_hsd = function(dat){
+  a = aov(abundance ~ covertype, data = dat)
+  h = HSD.test(a, "covertype")
+  h$groups %>% mutate(covertype = row.names(.)) %>% 
+    rename(label = groups) %>%  
+    dplyr::select(covertype, label)
+}
+
+## step 3: run the fit_anova function 
+## do this on the original relabund file, because we need all the reps
+
+xrd_hsd_covertype = 
+  xrd_stats %>% 
+  #filter(cover_type == "Open") %>% 
+  group_by(slopepos, mineral) %>% 
+  do(fit_hsd(.))
+
+# xrd_table_with_hsd_covertype = 
+#   xrd_data_tableanalysis %>% 
+#   left_join(xrd_hsd_all) %>%
+#   # combine the values with the label notation
+#   mutate(value = paste(summary, label),
+#          # this will also add " NA" for the blank cells
+#          # use str_remove to remove the string
+#          #value = str_remove(value, " NA")
+#   ) %>% 
+#   dplyr::select(-summary, -label) %>% 
+#   pivot_wider(names_from = "slopepos", values_from = "value") %>% 
+#   force()
+
+# xrd_table_with_hsd_covertype %>% knitr::kable() # prints a somewhat clean table in the console
+# 
+# write.csv(xrd_table_with_hsd_covertype, "output/xrd_table_with_hsd_covertype.csv", row.names = FALSE)
+
+xrd_hsd_covertype %>% knitr::kable() # prints a somewhat clean table in the console
+
+write.csv(xrd_hsd_covertype, "output/xrd_hsd_covertype.csv", row.names = FALSE)
+
