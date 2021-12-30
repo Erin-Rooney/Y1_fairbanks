@@ -27,6 +27,7 @@ fticr_water_relabund =
   fticr_data_water %>% 
   left_join(select(fticr_meta_water, formula, Class), by = "formula") %>% 
   ## create a column for group counts
+  mutate(Class = factor(Class, levels = c("aliphatic", "unsaturated/lignin", "aromatic", "condensed aromatic"))) %>% 
   group_by(ID, slopepos, cover_type, plot, Class) %>% 
   dplyr::summarize(counts = n()) %>% 
   ## create a column for total counts
@@ -125,17 +126,20 @@ label = tribble(
   mutate(Material = factor(Material, levels = c("Organic", "Upper Mineral", "Lower Mineral")))
 
 # bar graph
-fticr_water_relabund_summarized %>% 
+relabund = fticr_water_relabund_summarized %>% 
   ggplot(aes(x = cover_type, y = relabundance))+
   geom_bar(aes(fill = Class), stat = "identity")+
   facet_wrap(slopepos ~ .)+
-  labs(x = "Cover Type", 
-       y = "Relative Abundance")+
-  scale_fill_manual(values = rev(pnw_palette("Sunset",4)))+
+  labs(x = "", 
+       y = "Relative Abundance, %")+
+  scale_fill_manual(values = (pnw_palette("Sunset",4)))+
   #geom_text(data = label, aes(x = Trtmt, y = y, label = label), size = 8, color = "white")+
   theme_er()+
-  theme(legend.position = 'bottom')+
+  theme(legend.position = 'bottom', panel.border = element_rect(color="white",size=0.5, fill = NA))+
   NULL
+
+ggsave("output/relabund.tiff", plot = relabund, height = 6, width = 10)
+ggsave("output/relabund.jpeg", plot = relabund, height = 6, width = 10)
 
 
 # 4. relabund summary table ----------------------------------------------------------------
