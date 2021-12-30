@@ -7,7 +7,9 @@ source("code/FTICR-0-packages.R")
 
 # 1. Load files-----------------------------------
 
-fticr_data_water = read.csv("fticr_data_water.csv") %>% select(ID, formula, slopepos, cover_type, plot) 
+#replaced ID with plot in line 12, moved plot to beginning (it was already at the end of line 12)
+
+fticr_data_water = read.csv("fticr_data_water.csv") %>% select(plot, formula, slopepos, cover_type) 
 fticr_meta_water = read.csv("fticr_meta_water.csv")
 #meta_hcoc_water  = read.csv("fticr_meta_hcoc_water.csv") %>% select(-Mass)
 ### ^^ the files above have aliph as well as aromatic for the same sample, which can be confusing/misleading
@@ -21,29 +23,33 @@ fticr_meta_water = read.csv("fticr_meta_water.csv")
 #2. Calculate Relabund
 ## aromatic rel_abund
 
-
+#replaced ID with plot in line 33 (plot was already at the end before Class)
+#same for line 37
 
 fticr_water_relabund = 
   fticr_data_water %>% 
   left_join(select(fticr_meta_water, formula, Class), by = "formula") %>% 
   ## create a column for group counts
-  mutate(Class = factor(Class, levels = c("aliphatic", "unsaturated/lignin", "aromatic", "condensed aromatic"))) %>% 
-  group_by(ID, slopepos, cover_type, plot, Class) %>% 
+  #mutate(Class = factor(Class, levels = c("aliphatic", "unsaturated/lignin", "aromatic", "condensed aromatic"))) %>% 
+  group_by(plot, slopepos, cover_type, Class) %>% 
   dplyr::summarize(counts = n()) %>% 
   ## create a column for total counts
-  group_by(ID, slopepos, cover_type, plot) %>%
+  group_by(plot, slopepos, cover_type) %>%
   dplyr::mutate(totalcounts = sum(counts)) %>% 
   ungroup() %>% 
   mutate(relabund = (counts/totalcounts)*100,
          relabund = round(relabund, 2)) %>% 
-mutate(slopepos = factor(slopepos, levels = c("Backslope", "Low Backslope", "Footslope")))
+mutate(slopepos = factor(slopepos, levels = c("Backslope", "Low Backslope", "Footslope"))) 
+  
 
 
 
 #2b. relabund summary by treatment ---
 
+
 fticr_water_relabund_summarized = 
   fticr_water_relabund %>% 
+  mutate(Class = factor(Class, levels = c("aliphatic", "unsaturated/lignin", "aromatic", "condensed aromatic"))) %>% 
   group_by(slopepos, cover_type, Class) %>% 
   dplyr::summarise(relabundance = round(mean(relabund), 2),
                    se = round(sd(relabund)/sqrt(n()),2))
@@ -126,7 +132,7 @@ label = tribble(
   mutate(Material = factor(Material, levels = c("Organic", "Upper Mineral", "Lower Mineral")))
 
 # bar graph
-relabund = fticr_water_relabund_summarized %>% 
+relabund_graph = fticr_water_relabund_summarized %>% 
   ggplot(aes(x = cover_type, y = relabundance))+
   geom_bar(aes(fill = Class), stat = "identity")+
   facet_wrap(slopepos ~ .)+
@@ -138,8 +144,8 @@ relabund = fticr_water_relabund_summarized %>%
   theme(legend.position = 'bottom', panel.border = element_rect(color="white",size=0.5, fill = NA))+
   NULL
 
-ggsave("output/relabund.tiff", plot = relabund, height = 6, width = 10)
-ggsave("output/relabund.jpeg", plot = relabund, height = 6, width = 10)
+ggsave("output/relabund_graph.tiff", plot = relabund_graph, height = 6, width = 10)
+ggsave("output/relabund_graph.jpeg", plot = relabund_graph, height = 6, width = 10)
 
 
 # 4. relabund summary table ----------------------------------------------------------------
@@ -153,6 +159,7 @@ relabund_table =
 
 ## step 2: create ANOVA function for relabund ~ Trtmt, for each combination of Site-Material-Class
 
+
 fit_aov = function(dat){
   
   aov(relabund ~ cover_type, data = dat) %>% 
@@ -162,8 +169,9 @@ fit_aov = function(dat){
     mutate(asterisk = case_when(pvalue <= 0.05 ~ "*")) %>% 
     dplyr::select(asterisk) %>% # we need only the asterisk column
     # two steps below, we need to left-join. 
-    # set Trtmt = "FTC" so the asterisks will be added to the FTC values only
-    mutate(cover_type = "Open")   
+    # set cover_type = "Open" so the asterisks will be added to the FTC values only
+    mutate(cover_type = "Open") %>% 
+    NULL
   
 }
 
@@ -194,7 +202,7 @@ write.csv(relabund_table_with_asterisk, "output/canopy_aovstats.csv", row.names 
 
 ##########################
 
-# Site Position (OPEN ONLY)
+# Site Position 
 
 
 # 4. relabund summary table ----------------------------------------------------------------
