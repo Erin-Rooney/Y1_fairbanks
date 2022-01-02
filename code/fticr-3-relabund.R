@@ -162,7 +162,7 @@ relabund_table =
 
 fit_aov = function(dat){
   
-  aov(relabund ~ cover_type, data = dat) %>% 
+  aov(relabund ~ 'cover_type', data = dat) %>% 
     broom::tidy() %>% # convert to clean dataframe
     rename(pvalue = `p.value`) %>% 
     filter(term == "cover_type") %>% 
