@@ -83,3 +83,49 @@ summary.aov(dbh_aov)
 dbh_hsd = HSD.test(dbh_aov, "slopepos")
 print(dbh_hsd)
 
+####
+
+#Stats
+
+
+library(nlme)
+
+
+soil_properties_stats =
+  soil_data %>% 
+  #filter(cover_type %in% "Canopy") %>% 
+  select(c(slopepos, cover_type, grav, LOI, Horizonation)) %>% 
+  
+  
+
+LOI_aov <- aov(LOI ~ slopepos*cover_type, data = soil_properties_stats)
+summary.aov(LOI_aov)
+
+LOI_slopepos_hsd = HSD.test(LOI_aov, "slopepos")
+print(LOI_slopepos_hsd)
+
+#
+
+LOI2_aov <- aov(LOI ~ slopepos, data = soil_properties_stats)
+summary.aov(LOI2_aov)
+
+LOI2_slopepos_hsd = HSD.test(LOI2_aov, "slopepos")
+print(LOI2_slopepos_hsd)
+
+
+LOI_interaction = lme(LOI ~ slopepos, random = ~1|Horizonation, na.action = na.omit, data = soil_properties_stats)
+
+summary(LOI_interaction)
+print(LOI_interaction)
+anova(LOI_interaction)
+
+LOI3_slopepos_hsd = HSD.test(LOI_interaction, "slopepos")
+print(LOI2_slopepos_hsd)
+
+#
+
+grav_aov <- aov(grav ~ slopepos*cover_type, data = soil_properties_stats)
+summary.aov(grav_aov)
+
+grav_slopepos_hsd = HSD.test(grav_aov, "slopepos")
+print(grav_slopepos_hsd)
