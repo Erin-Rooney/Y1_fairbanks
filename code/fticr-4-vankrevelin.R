@@ -44,7 +44,6 @@ fticr_water_hcoc =
 #   mutate(Material = factor (Material, levels = c("Organic", "Upper Mineral", "Lower Mineral")))
 # 
 fticr_water_hcoc %>% 
-  #filter(site %in% "calhoun") %>% 
   ggplot(aes(x=OC, y=HC, color = cover_type))+
   geom_point(alpha = 0.2, size = 1)+
   #stat_ellipse(show.legend = F)+
@@ -61,24 +60,26 @@ fticr_water_hcoc %>%
   theme_er()+
   scale_color_manual(values = pnw_palette("Bay", 2))
 
-fticr_water_hcoc %>% 
-  #filter(site %in% "calhoun") %>% 
+vankrev_covertype = 
+  fticr_water_hcoc %>% 
   ggplot(aes(x=OC, y=HC, color = slopepos))+
   geom_point(alpha = 0.2, size = 1)+
   #stat_ellipse(show.legend = F)+
   #stat_ellipse()+
-  facet_grid(cover_type ~ .)+
+  facet_grid(.~cover_type)+
   #geom_segment(x = 0.0, y = 1.5, xend = 1.2, yend = 1.5,color="black",linetype="longdash") +
   #geom_segment(x = 0.0, y = 0.7, xend = 1.2, yend = 0.4,color="black",linetype="longdash") +
   #geom_segment(x = 0.0, y = 1.06, xend = 1.2, yend = 0.51,color="black",linetype="longdash") +
   guides(colour = guide_legend(override.aes = list(alpha=1, size=2)))+
-  labs(title = "FTICR-MS",
-       x = "O:C",
-       y = "H:C",
-       color = "meshbag")+
+  labs(x = "O/C",
+       y = "H/C",
+       color = "")+
+  scale_color_manual(values = pnw_palette("Bay", 3))+
   theme_er()+
-  scale_color_manual(values = pnw_palette("Bay", 3))
+  theme(legend.position = "bottom", panel.border = element_rect(color="black",size=0.2, fill = NA))
 
+ggsave("output/vankrev_covertype.tiff", plot = vankrev_covertype, height = 4, width = 6)
+ggsave("output/vankrev_covertype.jpeg", plot = vankrev_covertype, height = 4, width = 6)
 
 # fticr_water_hcoc %>% 
 #   filter(site %in% "catalina", 
@@ -160,8 +161,10 @@ fticr_water_hcoc %>%
 
 ## calculate peaks lost/gained ---- 
 
-# this does only unique loss/gain by CON vs FTC
-fticr_water_ftc_loss = 
+#######PROBLEM WITH BELOW CODE
+
+# this does only unique loss/gain by open vs. canopy
+fticr_water_covertype_unique = 
   fticr_data_water_summarized %>% 
   # calculate n to see which peaks were unique vs. common
   group_by(formula, slopepos, plot) %>% 
@@ -169,11 +172,12 @@ fticr_water_ftc_loss =
   # n = 1 means unique to CON or FTC Trtmt
   # n = 2 means common to both
   filter(n == 1) %>% 
-  mutate(loss_gain = if_else(cover_type == "Open", "open", "canopy")) %>% 
+  #PROBLEMS START NOW
+  mutate(loss_gain = if_else(cover_type == "Open", "open", "Canopy")) %>% 
   left_join(meta_hcoc_water) %>% 
   mutate(slopepos = factor (slopepos, levels = c("Backslope", "Low Backslope", "Footslope")))
 
-fticr_water_ftc_loss_common = 
+fticr_water_covertype_unique_common = 
   fticr_data_water_summarized %>% 
   # calculate n to see which peaks were unique vs. common
   group_by(formula, slopepos, cover_type) %>% 
@@ -183,24 +187,32 @@ fticr_water_ftc_loss_common =
   # filter(n == 1) %>% 
   mutate(loss_gain = case_when(n == 2 ~ "common",
                                (n == 1 & cover_type == "Open") ~ "open",
-                               (n == 1 & Trtmt == "Canopy") ~ "canopy")) %>% 
+                               (n == 1 & cover_type == "Canopy") ~ "canopy")) %>% 
   left_join(meta_hcoc_water) %>% 
   mutate(slopepos = factor (slopepos, levels = c("Backslope", "Low Backslope", "Footslope")))
 
 # plot only lost/gained
-fticr_water_ftc_loss %>% 
+backslope_vankrev = 
+  fticr_water_covertype_unique %>%
+  filter(slopepos %in% "Backslope") %>% 
   ggplot(aes(x = OC, y = HC, color = loss_gain))+
-  geom_point(alpha = 0.2, size = 1)+
+  geom_point(alpha = 0.4, size = 1)+
   stat_ellipse(show.legend = F)+
   geom_segment(x = 0.0, y = 1.5, xend = 1.2, yend = 1.5,color="black",linetype="longdash") +
   geom_segment(x = 0.0, y = 0.7, xend = 1.2, yend = 0.4,color="black",linetype="longdash") +
   geom_segment(x = 0.0, y = 1.06, xend = 1.2, yend = 0.51,color="black",linetype="longdash") +
   guides(colour = guide_legend(override.aes = list(alpha=1, size=2)))+
-  ggtitle("Water extracted FTICR-MS")+
+  labs(x = "O/C",
+       y = "H/C")+
+  scale_color_manual(values = c('#006d77', '#e29578'))+
   facet_grid(slopepos ~ .)+
-  theme_er() +
-  scale_color_manual (values = rev(soil_palette("redox", 2)))
+  theme_er() 
 
+ggsave("output/vankrev_backslope.tiff", plot = backslope_vankrev, height = 3.5, width = 5)
+ggsave("output/vankrev_backslope.jpeg", plot = backslope_vankrev, height = 3.5, width = 5)
+
+
+  
 # plot common as well as lost/gained
 fticr_water_ftc_loss_common %>% 
   filter(loss_gain == "common") %>% 

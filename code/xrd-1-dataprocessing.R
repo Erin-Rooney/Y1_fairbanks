@@ -15,15 +15,17 @@ xrd_data = read.csv("processed/xrd_data.csv")
 
 xrd_data_processed =
   xrd_data %>% 
-  mutate(quartz_stdev = stringi::stri_replace_all_fixed(quartz_stdev, "ñ",""),
-         albite_stdev = stringi::stri_replace_all_fixed(albite_stdev, "ñ",""),
-         anorthite_stdev = stringi::stri_replace_all_fixed(anorthite_stdev, "ñ",""),
-         microcline_stdev = stringi::stri_replace_all_fixed(microcline_stdev, "ñ",""),
-         chlorite_stdev = stringi::stri_replace_all_fixed(chlorite_stdev, "ñ",""),
-         mica_stdev = stringi::stri_replace_all_fixed(mica_stdev, "ñ",""),
-         hornblend_stdev = stringi::stri_replace_all_fixed(hornblend_stdev, "ñ",""),
-         ankerite_stdev = stringi::stri_replace_all_fixed(ankerite_stdev, "ñ","")) %>% 
-  rename(hornblende_stdev = hornblend_stdev) %>%
+  select(-c(quartz_stdev, albite_stdev, anorthite_stdev, microcline_stdev, chlorite_stdev, 
+            mica_stdev, hornblend_stdev, ankerite_stdev, feldspar_decimal, rwp)) %>% 
+  # mutate(quartz_stdev = stringi::stri_replace_all_fixed(quartz_stdev, "ñ",""),
+  #        albite_stdev = stringi::stri_replace_all_fixed(albite_stdev, "ñ",""),
+  #        anorthite_stdev = stringi::stri_replace_all_fixed(anorthite_stdev, "ñ",""),
+  #        microcline_stdev = stringi::stri_replace_all_fixed(microcline_stdev, "ñ",""),
+  #        chlorite_stdev = stringi::stri_replace_all_fixed(chlorite_stdev, "ñ",""),
+  #        mica_stdev = stringi::stri_replace_all_fixed(mica_stdev, "ñ",""),
+  #        hornblend_stdev = stringi::stri_replace_all_fixed(hornblend_stdev, "ñ",""),
+  #        ankerite_stdev = stringi::stri_replace_all_fixed(ankerite_stdev, "ñ","")) %>% 
+  # rename(hornblende_stdev = hornblend_stdev) %>%
   separate(sample, sep = " ", into = c("sample_num", "sample_id")) %>% 
   separate(sample_id, sep = "-", into = c("canopy_slope", "morph")) %>%
   mutate(canopy_slope = recode(canopy_slope, 'LDC' = 'LOC',
@@ -49,14 +51,14 @@ xrd_data_tableanalysis =
                 mica = as.numeric(mica),
                 hornblende = as.numeric(hornblende),
                 ankerite = as.numeric(ankerite),
-                rwp = as.numeric(rwp),
-                feldspar_decimal = as.numeric(feldspar_decimal),
+                #rwp = as.numeric(rwp),
+                #feldspar_decimal = as.numeric(feldspar_decimal),
                 ) %>% 
-  mutate(feldspar = (feldspar_decimal * 100)) %>% 
-  select(-c(quartz_stdev, albite_stdev, anorthite_stdev, microcline_stdev,
-            chlorite_stdev, mica_stdev, hornblende_stdev, ankerite_stdev, feldspar_decimal)) %>% 
+  #mutate(feldspar = (feldspar_decimal * 100)) %>% 
+  # select(-c(quartz_stdev, albite_stdev, anorthite_stdev, microcline_stdev,
+  #           chlorite_stdev, mica_stdev, hornblende_stdev, ankerite_stdev)) %>% 
   pivot_longer(cols = c(quartz, albite, anorthite, microcline, chlorite, mica, hornblende,
-                        ankerite, rwp, feldspar), names_to = "mineral", values_to = "abundance") %>% 
+                        ankerite), names_to = "mineral", values_to = "abundance") %>% 
   #group_by(slopepos, covertype, morph) %>% 
   group_by(slopepos, covertype, mineral) %>% 
   dplyr::summarize(mean = round(mean(abundance), 3),
@@ -67,7 +69,6 @@ xrd_data_tableanalysis =
 
 
 xrd_stats = 
-  xrd_data_tableanalysis =
   xrd_data_processed %>% 
   dplyr::mutate(quartz = as.numeric(quartz),
                 albite = as.numeric(albite),
@@ -77,20 +78,26 @@ xrd_stats =
                 mica = as.numeric(mica),
                 hornblende = as.numeric(hornblende),
                 ankerite = as.numeric(ankerite),
-                rwp = as.numeric(rwp),
-                feldspar_decimal = as.numeric(feldspar_decimal),
+                # rwp = as.numeric(rwp),
+                # feldspar_decimal = as.numeric(feldspar_decimal),
   ) %>% 
-  mutate(feldspar = (feldspar_decimal * 100)) %>% 
-  select(-c(quartz_stdev, albite_stdev, anorthite_stdev, microcline_stdev,
-            chlorite_stdev, mica_stdev, hornblende_stdev, ankerite_stdev, feldspar_decimal)) %>% 
+  #mutate(feldspar = (feldspar_decimal * 100)) %>% 
+  # select(-c(quartz_stdev, albite_stdev, anorthite_stdev, microcline_stdev,
+  #           chlorite_stdev, mica_stdev, hornblende_stdev, ankerite_stdev)) %>% 
   pivot_longer(cols = c(quartz, albite, anorthite, microcline, chlorite, mica, hornblende,
-                        ankerite, rwp, feldspar), names_to = "mineral", values_to = "abundance") %>% 
+                        ankerite), names_to = "mineral", values_to = "abundance") %>% 
+  group_by(slopepos, covertype, mineral) %>% 
+  dplyr::summarize(mean = round(mean(abundance), 3),
+                   se = round(sd(abundance)/sqrt(n()),3)) %>% 
   na.omit()
 
+
 xrd_slope = 
-  xrd_data_tableanalysis %>% 
+  xrd_stats %>% 
   mutate(slopepos = recode(slopepos, "low_backslope" = 'low backslope')) %>% 
-  mutate(slopepos = factor(slopepos, levels = c("backslope", "low backslope", "footslope"))) %>%
+  mutate(slopepos = factor(slopepos, levels = c("backslope", "low backslope", "footslope")))
+
+xrd_slope %>% 
   ggplot(aes(x = mineral, y = mean, fill = covertype))+
   geom_bar(stat = "identity", position = position_dodge())+
   geom_errorbar(aes(ymin=(mean-se/2),ymax=(mean+se/2)),width=.2,position=position_dodge(.9))+
@@ -106,7 +113,7 @@ xrd_slope =
 
 
 xrd_cover =
-  xrd_data_tableanalysis %>% 
+  xrd_stats %>% 
   mutate(slopepos = recode(slopepos, "low_backslope" = 'low backslope')) %>% 
   mutate(slopepos = factor(slopepos, levels = c("backslope", "low backslope", "footslope"))) %>%
   ggplot(aes(x = mineral, y = mean, fill = slopepos))+
@@ -115,7 +122,7 @@ xrd_cover =
   coord_flip() +
   labs(y = "abundance",
        x = "")+
-  scale_fill_manual(values = (PNWColors::pnw_palette("Shuksan", 3)))+
+  scale_fill_manual(values = (PNWColors::pnw_palette("Sunset2", 3)))+
   theme_er()+
   theme(legend.position = "bottom", panel.border = element_rect(color="white",size=0.5, fill = NA)
   )+

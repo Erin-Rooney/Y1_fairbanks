@@ -132,7 +132,8 @@ label = tribble(
   mutate(Material = factor(Material, levels = c("Organic", "Upper Mineral", "Lower Mineral")))
 
 # bar graph
-relabund_graph = fticr_water_relabund_summarized %>% 
+#relabund_graph = 
+  fticr_water_relabund_summarized %>% 
   ggplot(aes(x = cover_type, y = relabundance))+
   geom_bar(aes(fill = Class), stat = "identity")+
   facet_wrap(slopepos ~ .)+
