@@ -124,12 +124,6 @@ fticr_water_relabund_summarized =
 # run anova to get statistical significance
 # then use that to create the label file below
 
-label = tribble(
-  ~Site, ~Trtmt, ~Material, ~y, ~label,
-  ### THIS IS ONLY AN EXAMPLE 
-  "HEAL", "FTC", "Lower Mineral", 50, "*"
-) %>% 
-  mutate(Material = factor(Material, levels = c("Organic", "Upper Mineral", "Lower Mineral")))
 
 # bar graph
 #relabund_graph = 
@@ -145,8 +139,28 @@ label = tribble(
   theme(legend.position = 'bottom', panel.border = element_rect(color="white",size=0.5, fill = NA))+
   NULL
 
+#figure relabund ~ slopepos
+
+relabund_slopepos_figure =
+  fticr_water_relabund_summarized %>% 
+    mutate(slopepos = factor(slopepos, levels = c("Footslope", "Low Backslope", "Backslope"))) %>% 
+    ggplot(aes(x = slopepos, y = relabundance))+
+    geom_bar(aes(fill = Class), stat = "identity")+
+    facet_wrap(cover_type ~ .)+
+    labs(x = "", 
+         y = "Relative Abundance, %")+
+    scale_fill_manual(values = (pnw_palette("Sailboat",4)))+
+    #geom_text(data = label, aes(x = Trtmt, y = y, label = label), size = 8, color = "white")+
+    theme_er()+
+    coord_flip()+
+    theme(legend.position = 'bottom', panel.border = element_rect(color="white",size=0.5, fill = NA))+
+    NULL
+
 ggsave("output/relabund_graph.tiff", plot = relabund_graph, height = 6, width = 10)
 ggsave("output/relabund_graph.jpeg", plot = relabund_graph, height = 6, width = 10)
+
+ggsave("output/relabund_slopepos_figure.tiff", plot = relabund_slopepos_figure, height = 6, width = 10)
+ggsave("output/relabund_slopepos_figure.jpeg", plot = relabund_slopepos_figure, height = 6, width = 10)
 
 
 # 4. relabund summary table ----------------------------------------------------------------
@@ -216,22 +230,25 @@ relabund_table_covertype =
   mutate(summary = paste(relabundance, "\u00b1", se)) %>% 
   dplyr::select(-relabundance, -se)
 
-## step 2: create ANOVA function for relabund ~ Trtmt, for each combination of Site-Material-Class
+## step 2: create ANOVA function for relabund ~ cover_type, for each combination of cover_type-slopepos-Class
 
 fit_aov_open = function(dat){
   
-  aov(relabund ~ slopepos, data = dat) %>% 
+  aov(relabund ~ cover_type, data = dat) %>% 
     broom::tidy() %>% # convert to clean dataframe
     rename(pvalue = `p.value`) %>% 
-    filter(term == "slopepos") %>% 
+    filter(term == "cover_type") %>% 
     mutate(asterisk = case_when(pvalue <= 0.05 ~ "*")) %>% 
     dplyr::select(asterisk) %>% # we need only the asterisk column
     # two steps below, we need to left-join. 
     # set Trtmt = "FTC" so the asterisks will be added to the FTC values only
-    #mutate(cover_type = "Open")   
+    mutate(cover_type = "Open") %>% 
     force()
   
 }
+
+
+# relabund ~ slopepos
 
 fit_hsd = function(dat){
   a = aov(relabund ~ slopepos, data = dat)
@@ -245,16 +262,47 @@ fit_hsd = function(dat){
 ## step 3: run the fit_anova function 
 ## do this on the original relabund file, because we need all the reps
 
-relabund_hsd_covertype = 
+#covertype 
+
+relabund_aov_covertype = 
+  fticr_water_relabund %>% 
+  #filter(cover_type == "Open") %>% 
+  group_by(slopepos, Class) %>% 
+  do(fit_aov_open(.))
+
+
+#slopepos
+
+relabund_hsd_slopepos = 
   fticr_water_relabund %>% 
   #filter(cover_type == "Open") %>% 
   group_by(cover_type, Class) %>% 
   do(fit_hsd(.))
 
+
+#################
+
+
 ## step 4: combine the summarized values with the asterisks
-relabund_table_with_hsd_covertype = 
-  relabund_table_covertype %>% 
+
+#Not working, issue with asterisk as a character, won't paste.
+relabund_table_with_aov_covertype = 
+  relabund_aov_covertype %>% 
   left_join(relabund_hsd_covertype) %>%
+  # combine the values with the label notation
+  mutate(value = paste(summary, asterisk),
+         # this will also add " NA" for the blank cells
+         # use str_remove to remove the string
+         #value = str_remove(value, " NA")
+  ) %>% 
+  dplyr::select(-summary, -asterisk) %>% 
+  pivot_wider(names_from = "slopepos", values_from = "value") %>% 
+  force()
+
+# working
+relabund_table_with_hsd_slopepos = 
+  relabund_table_covertype %>% 
+  left_join(relabund_hsd_slopepos) %>%
   # combine the values with the label notation
   mutate(value = paste(summary, label),
          # this will also add " NA" for the blank cells
@@ -265,10 +313,13 @@ relabund_table_with_hsd_covertype =
   pivot_wider(names_from = "slopepos", values_from = "value") %>% 
   force()
 
-relabund_table_with_hsd_covertype %>% knitr::kable() # prints a somewhat clean table in the console
+relabund_table_with_hsd_slopepos %>% knitr::kable() # prints a somewhat clean table in the console
 
 write.csv(relabund_table_with_hsd_covertype, "output/slopepos_hsdstats.csv", row.names = FALSE)
 
+
+
+#################################
 
 # Site Position (CANOPY ONLY)
 
@@ -277,50 +328,50 @@ write.csv(relabund_table_with_hsd_covertype, "output/slopepos_hsdstats.csv", row
 ## step 1: prepare the data, combine mean +/- se
 ## unicode "\u00b1" gives plus-minus symbol
 
-relabund_table_canopy = 
-  fticr_water_relabund_summarized %>% 
-  filter(cover_type == "Canopy") %>% 
-  mutate(summary = paste(relabundance, "\u00b1", se)) %>% 
-  dplyr::select(-relabundance, -se)
-
-## step 2: create ANOVA function for relabund ~ Trtmt, for each combination of Site-Material-Class
-
-fit_aov_canopy = function(dat){
+# relabund_table_canopy = 
+#   fticr_water_relabund_summarized %>% 
+#   filter(cover_type == "Canopy") %>% 
+#   mutate(summary = paste(relabundance, "\u00b1", se)) %>% 
+#   dplyr::select(-relabundance, -se)
+# 
+# ## step 2: create ANOVA function for relabund ~ Trtmt, for each combination of Site-Material-Class
+# 
+# fit_aov_canopy = function(dat){
+#   
+#   aov(relabund ~ slopepos, data = dat) %>% 
+#     broom::tidy() %>% # convert to clean dataframe
+#     rename(pvalue = `p.value`) %>% 
+#     filter(term == "slopepos") %>% 
+#     mutate(asterisk = case_when(pvalue <= 0.05 ~ "*")) %>% 
+#     dplyr::select(asterisk) %>% # we need only the asterisk column
+#     # two steps below, we need to left-join. 
+#     # set Trtmt = "FTC" so the asterisks will be added to the FTC values only
+#     mutate(cover_type = "Canopy")   
   
-  aov(relabund ~ slopepos, data = dat) %>% 
-    broom::tidy() %>% # convert to clean dataframe
-    rename(pvalue = `p.value`) %>% 
-    filter(term == "slopepos") %>% 
-    mutate(asterisk = case_when(pvalue <= 0.05 ~ "*")) %>% 
-    dplyr::select(asterisk) %>% # we need only the asterisk column
-    # two steps below, we need to left-join. 
-    # set Trtmt = "FTC" so the asterisks will be added to the FTC values only
-    mutate(cover_type = "Canopy")   
-  
-}
+# }
 
 
 ## step 3: run the fit_anova function 
 ## do this on the original relabund file, because we need all the reps
 
-relabund_asterisk_canopy = 
-  fticr_water_relabund %>% 
-  filter(cover_type == "Canopy") %>% 
-  group_by(Class) %>% 
-  do(fit_aov_canopy(.))
-
-## step 4: combine the summarized values with the asterisks
-relabund_table_with_asterisk_canopy = 
-  relabund_table_canopy %>% 
-  left_join(relabund_asterisk_canopy) %>%
-  # combine the values with the asterisk notation
-  mutate(value = paste(summary, asterisk),
-         # this will also add " NA" for the blank cells
-         # use str_remove to remove the string
-         value = str_remove(value, " NA")) %>% 
-  dplyr::select(-summary, -asterisk) %>% 
-  pivot_wider(names_from = "slopepos", values_from = "value")
-
-relabund_table_with_asterisk_canopy %>% knitr::kable() # prints a somewhat clean table in the console
-
-write.csv(relabund_table_with_asterisk_canopy, "output/slopeposcanopy_aovstats.csv", row.names = FALSE)
+# relabund_asterisk_canopy = 
+#   fticr_water_relabund %>% 
+#   filter(cover_type == "Canopy") %>% 
+#   group_by(Class) %>% 
+#   do(fit_aov_canopy(.))
+# 
+# ## step 4: combine the summarized values with the asterisks
+# relabund_table_with_asterisk_canopy = 
+#   relabund_table_canopy %>% 
+#   left_join(relabund_asterisk_canopy) %>%
+#   # combine the values with the asterisk notation
+#   mutate(value = paste(summary, asterisk),
+#          # this will also add " NA" for the blank cells
+#          # use str_remove to remove the string
+#          value = str_remove(value, " NA")) %>% 
+#   dplyr::select(-summary, -asterisk) %>% 
+#   pivot_wider(names_from = "slopepos", values_from = "value")
+# 
+# relabund_table_with_asterisk_canopy %>% knitr::kable() # prints a somewhat clean table in the console
+# 
+# write.csv(relabund_table_with_asterisk_canopy, "output/slopeposcanopy_aovstats.csv", row.names = FALSE)

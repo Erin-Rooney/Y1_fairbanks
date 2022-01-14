@@ -76,15 +76,21 @@ grp =
 
 pca = prcomp(num, scale. = T)
 
-ggbiplot(pca, obs.scale = 1, var.scale = 1,
+pca_fig = ggbiplot(pca, obs.scale = 1, var.scale = 1,
          groups = as.character(grp$slopepos), 
          ellipse = TRUE, circle = FALSE, var.axes = TRUE) +
   geom_point(size=4,stroke=1, aes(color = groups, shape = grp$cover_type))+
-  xlim(-4,5)+
-  ylim(-3.5,4)+
-  NULL +
+  xlim(-5,5)+
+  ylim(-5,5)+
+  scale_color_manual(values = rev(PNWColors::pnw_palette("Bay", 3)))+
   theme_er()+
-  scale_color_manual(values = rev(PNWColors::pnw_palette("Bay", 3)))
+  theme(legend.position = "none", panel.border = element_rect(color="white",size=0.2, fill = NA))+
+  #theme(legend.position = "right", panel.border = element_rect(color="white",size=0.2, fill = NA))+
+  NULL
+
+ggsave("output/pcafig.tiff", plot = pca_fig, height = 5, width = 5)
+ggsave("output/pcafig.jpeg", plot = pca_fig, height = 5, width = 5)
+   
 
 
 

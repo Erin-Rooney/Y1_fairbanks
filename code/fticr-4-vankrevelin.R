@@ -60,23 +60,24 @@ fticr_water_hcoc %>%
   theme_er()+
   scale_color_manual(values = pnw_palette("Bay", 2))
 
-vankrev_covertype = 
+#vankrev_covertype = 
   fticr_water_hcoc %>% 
   ggplot(aes(x=OC, y=HC, color = slopepos))+
   geom_point(alpha = 0.2, size = 1)+
-  #stat_ellipse(show.legend = F)+
-  #stat_ellipse()+
+  # stat_ellipse(show.legend = F)+
+  # stat_ellipse()+
   facet_grid(.~cover_type)+
-  #geom_segment(x = 0.0, y = 1.5, xend = 1.2, yend = 1.5,color="black",linetype="longdash") +
-  #geom_segment(x = 0.0, y = 0.7, xend = 1.2, yend = 0.4,color="black",linetype="longdash") +
-  #geom_segment(x = 0.0, y = 1.06, xend = 1.2, yend = 0.51,color="black",linetype="longdash") +
+  # geom_segment(x = 0.0, y = 1.5, xend = 1.2, yend = 1.5,color="black",linetype="longdash") +
+  # geom_segment(x = 0.0, y = 0.7, xend = 1.2, yend = 0.4,color="black",linetype="longdash") +
+  # geom_segment(x = 0.0, y = 1.06, xend = 1.2, yend = 0.51,color="black",linetype="longdash") +
   guides(colour = guide_legend(override.aes = list(alpha=1, size=2)))+
   labs(x = "O/C",
        y = "H/C",
        color = "")+
   scale_color_manual(values = pnw_palette("Bay", 3))+
   theme_er()+
-  theme(legend.position = "bottom", panel.border = element_rect(color="black",size=0.2, fill = NA))
+  theme(legend.position = "bottom", panel.border = element_rect(color="black",size=0.2, fill = NA))+
+    
 
 ggsave("output/vankrev_covertype.tiff", plot = vankrev_covertype, height = 4, width = 6)
 ggsave("output/vankrev_covertype.jpeg", plot = vankrev_covertype, height = 4, width = 6)
@@ -205,11 +206,13 @@ backslope_vankrev =
   labs(x = "O/C",
        y = "H/C")+
   scale_color_manual(values = c('#006d77', '#e29578'))+
-  facet_grid(slopepos ~ .)+
-  theme_er() 
+  #facet_grid(slopepos ~ .)+
+  theme_er() +
+  theme(legend.position = "bottom", panel.border = element_rect(color="white",size=0.2, fill = NA))
 
-ggsave("output/vankrev_backslope.tiff", plot = backslope_vankrev, height = 3.5, width = 5)
-ggsave("output/vankrev_backslope.jpeg", plot = backslope_vankrev, height = 3.5, width = 5)
+
+ggsave("output/vankrev_backslope.tiff", plot = backslope_vankrev, height = 3, width = 3)
+ggsave("output/vankrev_backslope.jpeg", plot = backslope_vankrev, height = 3, width = 3)
 
 
   

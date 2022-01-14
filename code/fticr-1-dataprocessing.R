@@ -113,7 +113,7 @@ fticr_meta_water =
 # subset of meta for HC/OC only, for Van Krevelen diagrams
 meta_hcoc_water = 
   fticr_meta_water %>% 
-  dplyr::select(Mass, formula, HC, OC)
+  dplyr::select(Mass, formula, HC, OC, NOSC)
 
 fticr_data_water = 
   fticr_report_water %>% 
