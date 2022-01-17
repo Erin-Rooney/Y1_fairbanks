@@ -43,22 +43,36 @@ fticr_water_hcoc =
 #   left_join(fticr_water_nosc_trt) %>% 
 #   mutate(Material = factor (Material, levels = c("Organic", "Upper Mineral", "Lower Mineral")))
 # 
+
+gglabel2 = tribble(
+ ~x, ~y, ~label,
+ 0.2, 1.75, "aliphatic",
+ 0.2, 1.25, "lignin-like",
+ 0.2, 0.85, "aromatic",
+ 0.3, 0.35, "condensed aromatic",
+)
+
+
 fticr_water_hcoc %>% 
-  ggplot(aes(x=OC, y=HC, color = cover_type))+
-  geom_point(alpha = 0.2, size = 1)+
+  ggplot(aes(x=OC, y=HC, color = OC))+
+  geom_point(alpha = 0.4, size = 2)+
   #stat_ellipse(show.legend = F)+
   #stat_ellipse()+
-  facet_grid(slopepos ~ .)+
-  #geom_segment(x = 0.0, y = 1.5, xend = 1.2, yend = 1.5,color="black",linetype="longdash") +
-  #geom_segment(x = 0.0, y = 0.7, xend = 1.2, yend = 0.4,color="black",linetype="longdash") +
-  #geom_segment(x = 0.0, y = 1.06, xend = 1.2, yend = 0.51,color="black",linetype="longdash") +
-  guides(colour = guide_legend(override.aes = list(alpha=1, size=2)))+
-  labs(title = "FTICR-MS",
-       x = "O:C",
-       y = "H:C",
-       color = "NOSC")+
+  #facet_grid(slopepos ~ .)+
+  geom_segment(x = 0.0, y = 1.5, xend = 1.2, yend = 1.5,color="black",linetype="longdash") +
+  geom_segment(x = 0.0, y = 0.7, xend = 1.2, yend = 0.4,color="black",linetype="longdash") +
+  geom_segment(x = 0.0, y = 1.06, xend = 1.2, yend = 0.51,color="black",linetype="longdash") +
+  geom_text(data = gglabel2, aes(x = x, y = y, label = label), color = "black", size = 4)+
+  #guides(colour = guide_legend(override.aes = list(alpha=1, size=2)))+
+  scale_color_gradientn(colors = pnw_palette("Sailboat"))+
+  labs(x = "O/C",
+       y = "H/C",
+       color = "")+
   theme_er()+
-  scale_color_manual(values = pnw_palette("Bay", 2))
+  theme(panel.border = element_rect(color="black",size=0.5, fill = NA), legend.position = "none")
+  )+
+  NULL
+
 
 #vankrev_covertype = 
   fticr_water_hcoc %>% 
