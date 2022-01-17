@@ -332,8 +332,12 @@ xrd_sample =
          chlorite = chlorite_sample, 
          mica = mica_sample,
          hornblende = hornblende_sample,
-         ankerite = ankerite_sample)
+         ankerite = ankerite_sample) %>% 
+  na.omit()
          
-  
+
+xrd_sample %>% knitr::kable() # prints a somewhat clean table in the console
+
+write.csv(xrd_sample, "output/xrd_sample.csv", row.names = FALSE)
 
          
