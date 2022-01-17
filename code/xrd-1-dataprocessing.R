@@ -280,3 +280,60 @@ xrd_hsd_covertype %>% knitr::kable() # prints a somewhat clean table in the cons
 
 write.csv(xrd_hsd_covertype, "output/xrd_hsd_covertype.csv", row.names = FALSE)
 
+
+
+################## Sample and sample error table ----------------
+
+xrd_data_sample =
+  xrd_data %>% 
+  # select(-c(quartz_stdev, albite_stdev, anorthite_stdev, microcline_stdev, chlorite_stdev, 
+  #           mica_stdev, hornblend_stdev, ankerite_stdev, feldspar_decimal, rwp)) %>% 
+  # mutate(quartz_stdev = stringi::stri_replace_all_fixed(quartz_stdev, "ñ",""),
+  #        albite_stdev = stringi::stri_replace_all_fixed(albite_stdev, "ñ",""),
+  #        anorthite_stdev = stringi::stri_replace_all_fixed(anorthite_stdev, "ñ",""),
+  #        microcline_stdev = stringi::stri_replace_all_fixed(microcline_stdev, "ñ",""),
+  #        chlorite_stdev = stringi::stri_replace_all_fixed(chlorite_stdev, "ñ",""),
+  #        mica_stdev = stringi::stri_replace_all_fixed(mica_stdev, "ñ",""),
+  #        hornblend_stdev = stringi::stri_replace_all_fixed(hornblend_stdev, "ñ",""),
+  #        ankerite_stdev = stringi::stri_replace_all_fixed(ankerite_stdev, "ñ","")) %>% 
+  rename(hornblende_stdev = hornblend_stdev) %>%
+  separate(sample, sep = " ", into = c("sample_num", "sample_id")) %>% 
+  separate(sample_id, sep = "-", into = c("canopy_slope", "morph")) %>%
+  mutate(canopy_slope = recode(canopy_slope, 'LDC' = 'LOC',
+                               'LDA' = "LOA")) %>% 
+  dplyr::mutate(slopepos = case_when(grepl("F", canopy_slope)~"footslope",
+                                     grepl("L", canopy_slope)~"low_backslope",
+                                     grepl("B", canopy_slope)~"backslope"),
+                covertype = case_when(grepl("O", canopy_slope)~"open",
+                                      grepl("o", canopy_slope)~"open",
+                                      grepl("CC", canopy_slope)~"canopy",
+                                      grepl("C", canopy_slope)~"canopy")) %>% 
+  select(-c(canopy_slope)) %>% 
+  mutate(quartz_sample = paste(quartz, "\u00b1", quartz_stdev),
+         albite_sample = paste(albite, "\u00b1", albite_stdev),
+         anorthite_sample = paste(anorthite, "\u00b1", anorthite_stdev),
+         microcline_sample = paste(microcline, "\u00b1", microcline_stdev),
+         chlorite_sample = paste(chlorite, "\u00b1", chlorite_stdev),
+         mica_sample = paste(mica, "\u00b1", mica_stdev),
+         hornblende_sample = paste(hornblende, "\u00b1", hornblende_stdev),
+         ankerite_sample = paste(ankerite, "\u00b1", ankerite_stdev
+                          )) 
+
+xrd_sample =
+  xrd_data_sample %>% 
+  select(-c(quartz_stdev, albite_stdev, anorthite_stdev, microcline_stdev, chlorite_stdev, 
+                      mica_stdev, hornblende_stdev, ankerite_stdev, quartz, albite, anorthite, 
+            microcline, chlorite, mica, hornblende, ankerite, sample_num)) %>% 
+  mutate(feldspar = (feldspar_decimal * 100)) %>% 
+  rename(quartz = quartz_sample,
+         albite = albite_sample,
+         anorthite = anorthite_sample,
+         microcline = microcline_sample,
+         chlorite = chlorite_sample, 
+         mica = mica_sample,
+         hornblende = hornblende_sample,
+         ankerite = ankerite_sample)
+         
+  
+
+         
