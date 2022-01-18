@@ -129,7 +129,19 @@ ggsave("output/backslope_unique_nosc.tiff", plot = backslope_unique_nosc, height
 ggsave("output/backslope_unique_nosc.jpeg", plot = backslope_unique_nosc, height = 3, width = 3)
 
 
+# BACKSLOPE STATS---------------------------
 
+library(nlme)
+
+
+backslope_unique_nosc_stats = 
+  fticr_water_slopepos_unique %>% 
+  #mutate(slopepos = factor (slopepos, levels = c("Footslope", "Low Backslope","Backslope"))) %>%
+  filter(slopepos %in% "Backslope") 
+
+aov_backslope = aov(NOSC ~ cover_type, data = backslope_unique_nosc_stats)
+summary(aov_backslope)
+print(aov_backslope)
 
 
 # fticr_water_nosc %>% 
