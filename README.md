@@ -1,4 +1,4 @@
-# The role of canopy in soil function across a Fairbanks hillslope in discontinuous permafrost. 
+## The role of canopy in soil function across a Fairbanks hillslope in discontinuous permafrost. 
 
 Erin C. Rooney, Vanessa L. Bailey, Kaizad F. Patel, Alexander Kholodov, Holly Golightly, Rebecca A. Lybrand
  
