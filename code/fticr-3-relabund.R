@@ -39,7 +39,9 @@ fticr_water_relabund =
   ungroup() %>% 
   mutate(relabund = (counts/totalcounts)*100,
          relabund = round(relabund, 2)) %>% 
-mutate(slopepos = factor(slopepos, levels = c("Backslope", "Low Backslope", "Footslope"))) 
+mutate(slopepos = factor(slopepos, levels = c("Backslope", "Low Backslope", "Footslope"))) %>% 
+  mutate(cover_type = recode(cover_type, "Canopy" = "closed"),
+         cover_type = recode(cover_type, "Open" = "open")) 
   
 
 

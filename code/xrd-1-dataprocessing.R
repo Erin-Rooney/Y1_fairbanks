@@ -89,13 +89,15 @@ xrd_stats =
   group_by(slopepos, covertype, mineral) %>% 
   dplyr::summarize(mean = round(mean(abundance), 3),
                    se = round(sd(abundance)/sqrt(n()),3)) %>% 
-  na.omit()
+  na.omit() %>% 
+  mutate(covertype = recode(covertype, "canopy" = "closed"))
+
 
 
 xrd_slope = 
   xrd_stats %>% 
   mutate(slopepos = recode(slopepos, "low_backslope" = 'low backslope')) %>% 
-  mutate(slopepos = factor(slopepos, levels = c("backslope", "low backslope", "footslope")))
+  mutate(slopepos = factor(slopepos, levels = c("backslope", "low backslope", "footslope"))) 
 
 xrd_slope %>% 
   ggplot(aes(x = mineral, y = mean, fill = covertype))+
@@ -131,8 +133,8 @@ xrd_cover =
 
 ggsave("output/xrd_cover.tiff", plot = xrd_cover, height = 6, width = 10)
 ggsave("output/xrd_cover.jpeg", plot = xrd_cover, height = 6, width = 10)
-ggsave("output/xrd_slope.tiff", plot = xrd_slope, height = 6, width = 10)
-ggsave("output/xrd_slope.jpeg", plot = xrd_slope, height = 6, width = 10)
+#ggsave("output/xrd_slope.tiff", plot = xrd_slope, height = 6, width = 10)
+#ggsave("output/xrd_slope.jpeg", plot = xrd_slope, height = 6, width = 10)
 
 # xrd_data_processed %>% 
 #   ggplot(aes(y = quartz, x = covertype, fill = covertype))+
@@ -156,6 +158,7 @@ ggsave("output/xrd_slope.jpeg", plot = xrd_slope, height = 6, width = 10)
 #     NULL
   
 # 5. XRD stats ------------------------
+#Changed canopy to closed on 2022 1 25, may affect code downstream
 
 library(nlme)
 

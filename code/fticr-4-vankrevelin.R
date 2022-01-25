@@ -28,7 +28,9 @@ fticr_data_water_summarized =
 fticr_water_hcoc =
   fticr_data_water_summarized %>% 
   left_join(fticr_meta_water) %>% 
-  dplyr::select(formula, slopepos, cover_type, plot, HC, OC)
+  dplyr::select(formula, slopepos, cover_type, plot, HC, OC) %>% 
+  mutate(cover_type = recode(cover_type, "Canopy" = "closed"),
+         cover_type = recode(cover_type, "Open" = "open")) 
 
 
 
@@ -78,7 +80,7 @@ vankrev_method =
 ggsave("output/vankrev_method.tiff", plot = vankrev_method, height = 4.5, width = 5)
 
 
-#vankrev_covertype = 
+vankrev_covertype = 
   fticr_water_hcoc %>% 
   ggplot(aes(x=OC, y=HC, color = slopepos))+
   geom_point(alpha = 0.2, size = 1)+
@@ -94,7 +96,7 @@ ggsave("output/vankrev_method.tiff", plot = vankrev_method, height = 4.5, width 
        color = "")+
   scale_color_manual(values = pnw_palette("Bay", 3))+
   theme_er()+
-  theme(legend.position = "bottom", panel.border = element_rect(color="black",size=0.2, fill = NA))+
+  theme(legend.position = "bottom", panel.border = element_rect(color="black",size=0.2, fill = NA))
     
 
 ggsave("output/vankrev_covertype.tiff", plot = vankrev_covertype, height = 4, width = 6)
@@ -180,11 +182,12 @@ ggsave("output/vankrev_covertype.jpeg", plot = vankrev_covertype, height = 4, wi
 
 ## calculate peaks lost/gained ---- 
 
-#######PROBLEM WITH BELOW CODE
 
 # this does only unique loss/gain by open vs. canopy
 fticr_water_covertype_unique = 
   fticr_data_water_summarized %>% 
+  mutate(cover_type = recode(cover_type, "Canopy" = "closed"),
+         cover_type = recode(cover_type, "Open" = "open")) %>% 
   # calculate n to see which peaks were unique vs. common
   group_by(formula, slopepos, plot) %>% 
   dplyr::mutate(n = n()) %>% 
@@ -192,7 +195,7 @@ fticr_water_covertype_unique =
   # n = 2 means common to both
   filter(n == 1) %>% 
   #PROBLEMS START NOW
-  mutate(loss_gain = if_else(cover_type == "Open", "open", "Canopy")) %>% 
+  mutate(loss_gain = if_else(cover_type == "open", "open", "closed")) %>% 
   left_join(meta_hcoc_water) %>% 
   mutate(slopepos = factor (slopepos, levels = c("Backslope", "Low Backslope", "Footslope")))
 
@@ -205,10 +208,11 @@ fticr_water_covertype_unique_common =
   # n = 2 means common to both
   # filter(n == 1) %>% 
   mutate(loss_gain = case_when(n == 2 ~ "common",
-                               (n == 1 & cover_type == "Open") ~ "open",
-                               (n == 1 & cover_type == "Canopy") ~ "canopy")) %>% 
+                               (n == 1 & cover_type == "open") ~ "open",
+                               (n == 1 & cover_type == "closed") ~ "closed")) %>% 
   left_join(meta_hcoc_water) %>% 
-  mutate(slopepos = factor (slopepos, levels = c("Backslope", "Low Backslope", "Footslope")))
+  mutate(slopepos = factor (slopepos, levels = c("Backslope", "Low Backslope", "Footslope"))) 
+
 
 # plot only lost/gained
 backslope_vankrev = 

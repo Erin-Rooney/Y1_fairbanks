@@ -34,6 +34,7 @@ fticr_water_relabund =
   ungroup() %>% 
   mutate(relabund = (counts/totalcounts)*100,
          relabund = round(relabund, 2)) 
+  
 
 
 ###################
@@ -55,6 +56,8 @@ library(ggbiplot)
 ## first, make wider
 relabund_pca =
   fticr_water_relabund %>%
+  mutate(cover_type = recode(cover_type, "Canopy" = "closed"),
+         cover_type = recode(cover_type, "Open" = "open")) %>% 
   #filter(slopepos == 'CON') %>% 
   ungroup %>% 
   dplyr::select(-c(counts, totalcounts),
@@ -91,7 +94,19 @@ pca_fig = ggbiplot(pca, obs.scale = 1, var.scale = 1,
 ggsave("output/pcafig.tiff", plot = pca_fig, height = 5, width = 5)
 ggsave("output/pcafig.jpeg", plot = pca_fig, height = 5, width = 5)
    
+pca_fig_legend = ggbiplot(pca, obs.scale = 1, var.scale = 1,
+                   groups = as.character(grp$slopepos), 
+                   ellipse = TRUE, circle = FALSE, var.axes = TRUE) +
+  geom_point(size=4,stroke=1, aes(color = groups, shape = grp$cover_type))+
+  xlim(-5,5)+
+  ylim(-5,5)+
+  scale_color_manual(values = rev(PNWColors::pnw_palette("Bay", 3)))+
+  theme_er()+
+  theme(legend.position = "right", panel.border = element_rect(color="white",size=0.2, fill = NA))+
+  #theme(legend.position = "right", panel.border = element_rect(color="white",size=0.2, fill = NA))+
+  NULL
 
+ggsave("output/pcafiglegend.tiff", plot = pca_fig_legend, height = 5, width = 8)
 
 
 # TOOL vs. HEAL (con, organic only) ----

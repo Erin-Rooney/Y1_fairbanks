@@ -37,6 +37,37 @@ fticr_water_nosc =
 
 # this does only unique loss/gain by open vs. canopy
 
+fticr_water_covertype_unique = 
+  fticr_data_water_summarized %>% 
+  mutate(cover_type = recode(cover_type, "Canopy" = "closed"),
+         cover_type = recode(cover_type, "Open" = "open")) %>% 
+  # calculate n to see which peaks were unique vs. common
+  group_by(formula, slopepos, plot) %>% 
+  dplyr::mutate(n = n()) %>% 
+  # n = 1 means unique to CON or FTC Trtmt
+  # n = 2 means common to both
+  filter(n == 1) %>% 
+  #PROBLEMS START NOW
+  mutate(loss_gain = if_else(cover_type == "open", "open", "closed")) %>% 
+  left_join(meta_hcoc_water) %>% 
+  mutate(slopepos = factor (slopepos, levels = c("Backslope", "Low Backslope", "Footslope")))
+
+fticr_water_covertype_unique_common = 
+  fticr_data_water_summarized %>% 
+  # calculate n to see which peaks were unique vs. common
+  group_by(formula, slopepos, cover_type) %>% 
+  dplyr::mutate(n = n()) %>% 
+  # n = 1 means unique to CON or FTC Trtmt
+  # n = 2 means common to both
+  # filter(n == 1) %>% 
+  mutate(loss_gain = case_when(n == 2 ~ "common",
+                               (n == 1 & cover_type == "open") ~ "open",
+                               (n == 1 & cover_type == "closed") ~ "closed")) %>% 
+  left_join(meta_hcoc_water) %>% 
+  mutate(slopepos = factor (slopepos, levels = c("Backslope", "Low Backslope", "Footslope"))) 
+
+
+
 fticr_water_slopepos_unique = 
   fticr_data_water_summarized %>% 
   # calculate n to see which peaks were unique vs. common
@@ -67,6 +98,8 @@ fticr_water_slopepos_unique %>%
 
 backslope_unique_nosc = 
   fticr_water_slopepos_unique %>% 
+  mutate(cover_type = recode(cover_type, "Canopy" = "closed"),
+         cover_type = recode(cover_type, "Open" = "open")) %>% 
   #mutate(slopepos = factor (slopepos, levels = c("Footslope", "Low Backslope","Backslope"))) %>%
   filter(slopepos %in% "Backslope") %>% 
   ggplot(aes(y = NOSC, x = cover_type, fill = cover_type)) +
