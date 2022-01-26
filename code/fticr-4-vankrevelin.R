@@ -182,10 +182,14 @@ ggsave("output/vankrev_covertype.jpeg", plot = vankrev_covertype, height = 4, wi
 
 ## calculate peaks lost/gained ---- 
 
+fticr_data_water_summarized_unique = 
+  fticr_water %>% 
+  distinct(slopepos, cover_type, plot, formula) %>% mutate(presence = 1)
+
 
 # this does only unique loss/gain by open vs. canopy
 fticr_water_covertype_unique = 
-  fticr_data_water_summarized %>% 
+  fticr_data_water_summarized_unique %>% 
   mutate(cover_type = recode(cover_type, "Canopy" = "closed"),
          cover_type = recode(cover_type, "Open" = "open")) %>% 
   # calculate n to see which peaks were unique vs. common
@@ -200,7 +204,7 @@ fticr_water_covertype_unique =
   mutate(slopepos = factor (slopepos, levels = c("Backslope", "Low Backslope", "Footslope")))
 
 fticr_water_covertype_unique_common = 
-  fticr_data_water_summarized %>% 
+  fticr_data_water_summarized_unique %>% 
   # calculate n to see which peaks were unique vs. common
   group_by(formula, slopepos, cover_type) %>% 
   dplyr::mutate(n = n()) %>% 
@@ -236,6 +240,24 @@ backslope_vankrev =
 ggsave("output/vankrev_backslope.tiff", plot = backslope_vankrev, height = 3, width = 3)
 ggsave("output/vankrev_backslope.jpeg", plot = backslope_vankrev, height = 3, width = 3)
 
+uniquepeaks_vankrev = 
+  fticr_water_covertype_unique %>%
+  #filter(slopepos %in% "Backslope") %>% 
+  ggplot(aes(x = OC, y = HC, color = loss_gain))+
+  geom_point(alpha = 0.2, size = 1)+
+  stat_ellipse(show.legend = F)+
+  geom_segment(x = 0.0, y = 1.5, xend = 1.2, yend = 1.5,color="black",linetype="longdash") +
+  geom_segment(x = 0.0, y = 0.7, xend = 1.2, yend = 0.4,color="black",linetype="longdash") +
+  geom_segment(x = 0.0, y = 1.06, xend = 1.2, yend = 0.51,color="black",linetype="longdash") +
+  guides(colour = guide_legend(override.aes = list(alpha=1, size=2)))+
+  labs(x = "O/C",
+       y = "H/C")+
+  scale_color_manual(values = c('#006d77', '#e29578'))+
+  facet_grid(slopepos ~ .)+
+  theme_er() +
+  theme(legend.position = "bottom", panel.border = element_rect(color="white",size=0.2, fill = NA))
+
+ggsave("output/uniquepeaks_vankrev.tiff", plot = uniquepeaks_vankrev, height = 7, width = 3)
 
   
 # plot common as well as lost/gained
