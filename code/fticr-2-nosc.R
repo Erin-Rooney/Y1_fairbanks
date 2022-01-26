@@ -159,4 +159,8 @@ aov_nosc = aov(NOSC ~ cover_type*slopepos, data = fticr_water_slopepos_unique)
 summary(aov_nosc)
 print(aov_nosc)
 
+nosc_hsd <- HSD.test(aov_nosc, "slopepos")
+print(nosc_hsd)
 
+nosc_hsd <- HSD.test(aov_nosc, "cover_type")
+print(nosc_hsd)
