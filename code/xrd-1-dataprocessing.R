@@ -124,7 +124,7 @@ xrd_cover =
   coord_flip() +
   labs(y = "abundance",
        x = "")+
-  scale_fill_manual(values = (PNWColors::pnw_palette("Sunset2", 3)))+
+  scale_fill_manual(values = rev(PNWColors::pnw_palette("Bay", 3)))+
   theme_er()+
   theme(legend.position = "bottom", panel.border = element_rect(color="white",size=0.5, fill = NA)
   )+

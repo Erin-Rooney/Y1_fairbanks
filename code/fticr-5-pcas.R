@@ -8,25 +8,30 @@ source("code/FTICR-0-packages.R")
 
 # 1. Load files-----------------------------------
 
-fticr_data_water = read.csv("fticr_data_water.csv")
-fticr_meta_water = read.csv("fticr_meta_water.csv")
-meta_hcoc_water  = read.csv("fticr_meta_hcoc_water.csv") %>% select(-Mass)
+fticr_data_water = read.csv("fticr_data_water.csv") 
+
+fticr_meta_water = read.csv("fticr_meta_water.csv") 
+meta_hcoc_water  = read.csv("fticr_meta_hcoc_water.csv") %>% select(-Mass) 
 ### ^^ the files above have aliph as well as aromatic for the same sample, which can be confusing/misleading
 ### create an index combining them
 
 fticr_water = 
   fticr_data_water %>% 
-  select(ID, formula, slopepos, cover_type, plot) 
+  select(ID, formula, slopepos, cover_type, plot) %>% 
+  mutate(slopenum = recode(slopepos, "Backslope" = "1-Backslope",
+                           "Low Backslope" = "2-Low Backslope",
+                           "Footslope" = "3-Footslope"))
 
 fticr_data_water_summarized = 
   fticr_water %>% 
-  distinct(ID, slopepos, cover_type, plot, formula) %>% mutate(presence = 1)
+  distinct(ID, slopepos, slopenum, cover_type, plot, formula) %>% mutate(presence = 1) 
+
 
 fticr_water_relabund = 
   fticr_data_water_summarized %>% 
   left_join(select(fticr_meta_water, formula, Class), by = "formula") %>% 
   ## create a column for group counts
-  group_by(slopepos, cover_type, plot, Class) %>% 
+  group_by(slopepos, slopenum, cover_type, plot, Class) %>% 
   dplyr::summarize(counts = n()) %>% 
   ## create a column for total counts
   group_by(slopepos, cover_type, plot) %>%
@@ -34,7 +39,7 @@ fticr_water_relabund =
   ungroup() %>% 
   mutate(relabund = (counts/totalcounts)*100,
          relabund = round(relabund, 2)) 
-  
+
 
 
 ###################
@@ -61,7 +66,7 @@ relabund_pca =
   #filter(slopepos == 'CON') %>% 
   ungroup %>% 
   dplyr::select(-c(counts, totalcounts),
-                slopepos, cover_type) %>% 
+                slopepos, cover_type) %>%
   pivot_wider(names_from = "Class", values_from = "relabund") %>% 
   replace(is.na(.),0) 
 #dplyr::select(-1)
@@ -74,13 +79,13 @@ num =
 grp = 
   relabund_pca %>% 
   dplyr::select(-c(aliphatic, aromatic, `condensed aromatic`, `unsaturated/lignin`),
-                slopepos, cover_type) %>% 
+                slopenum, cover_type) %>% 
   dplyr::mutate(row = row_number())
 
 pca = prcomp(num, scale. = T)
 
 pca_fig = ggbiplot(pca, obs.scale = 1, var.scale = 1,
-         groups = as.character(grp$slopepos), 
+         groups = as.character(grp$slopenum), 
          ellipse = TRUE, circle = FALSE, var.axes = TRUE) +
   geom_point(size=4,stroke=1, aes(color = groups, shape = grp$cover_type))+
   xlim(-5,5)+
@@ -95,7 +100,7 @@ ggsave("output/pcafig.tiff", plot = pca_fig, height = 5, width = 5)
 ggsave("output/pcafig.jpeg", plot = pca_fig, height = 5, width = 5)
    
 pca_fig_legend = ggbiplot(pca, obs.scale = 1, var.scale = 1,
-                   groups = as.character(grp$slopepos), 
+                   groups = as.character(grp$slopenum), 
                    ellipse = TRUE, circle = FALSE, var.axes = TRUE) +
   geom_point(size=4,stroke=1, aes(color = groups, shape = grp$cover_type))+
   xlim(-5,5)+
