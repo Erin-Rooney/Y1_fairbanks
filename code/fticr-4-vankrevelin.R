@@ -82,6 +82,7 @@ ggsave("output/vankrev_method.tiff", plot = vankrev_method, height = 4.5, width 
 
 vankrev_covertype = 
   fticr_water_hcoc %>% 
+  mutate(slopepos = factor (slopepos, levels = c("Footslope", "Low Backslope","Backslope"))) %>%
   ggplot(aes(x=OC, y=HC, color = slopepos))+
   geom_point(alpha = 0.2, size = 1)+
   # stat_ellipse(show.legend = F)+
