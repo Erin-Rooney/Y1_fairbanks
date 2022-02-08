@@ -82,7 +82,7 @@ ggsave("output/vankrev_method.tiff", plot = vankrev_method, height = 4.5, width 
 
 vankrev_covertype = 
   fticr_water_hcoc %>% 
-  mutate(slopepos = factor (slopepos, levels = c("Footslope", "Low Backslope","Backslope"))) %>%
+  mutate(slopepos = factor (slopepos, levels = c("Backslope", "Low Backslope", "Footslope"))) %>%
   ggplot(aes(x=OC, y=HC, color = slopepos))+
   geom_point(alpha = 0.2, size = 1)+
   # stat_ellipse(show.legend = F)+
@@ -95,7 +95,7 @@ vankrev_covertype =
   labs(x = "O/C",
        y = "H/C",
        color = "")+
-  scale_color_manual(values = pnw_palette("Bay", 3))+
+  scale_color_manual(values = rev(pnw_palette("Bay", 3)))+
   theme_er()+
   theme(legend.position = "bottom", panel.border = element_rect(color="black",size=0.2, fill = NA))
     
