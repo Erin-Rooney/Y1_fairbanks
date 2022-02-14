@@ -89,9 +89,18 @@ xrd_stats =
   group_by(slopepos, covertype, mineral) %>% 
   dplyr::summarize(mean = round(mean(abundance), 3),
                    se = round(sd(abundance)/sqrt(n()),3)) %>% 
+  mutate(value = paste(mean, "\u00b1", se)
+         # this will also add " NA" for the blank cells
+         # use str_remove to remove the string
+         #value = str_remove(value, " NA")
+  ) %>% 
+  dplyr::select(-mean, -se) %>% 
   na.omit() %>% 
   mutate(covertype = recode(covertype, "canopy" = "closed"))
 
+xrd_stats %>% knitr::kable() # prints a somewhat clean table in the console
+
+write.csv(xrd_stats, "output/xrd_stats.csv", row.names = FALSE)
 
 
 xrd_slope = 
