@@ -1,45 +1,45 @@
-ID,slopepos_num,slopepos,cover_type,rep,top_cm,mid_cm,bottom_cm,horizonation
-Y1 03,1,Footslope,Open,A,42,45,48,Bg1
-Y1 04,1,Footslope,Open,A,49,51.5,54,Bg2
-Y1 05,1,Footslope,Open,A,54,56,58,Bg3
-Y1 08,1,Footslope,Open,B,33,34,35,Oe/Bg
-Y1 09,1,Footslope,Open,B,35,37,39,Bg1
-Y1 10,1,Footslope,Open,B,39,41.5,44,Bg2
-Y1 13,1,Footslope,Open,C,33,39,45,Bg1
-Y1 14,1,Footslope,Open,C,45,47.5,50,Bg2
-Y1 15,1,Footslope,Open,C,50,52,54,Bg3
-Y1 18,1,Footslope,Canopy,A,29,33.5,38,Bg1
-Y1 19,1,Footslope,Canopy,A,38,40.5,43,Bg2
-Y1 20,1,Footslope,Canopy,A,43,45.5,48,Bg3
-Y1 23,1,Footslope,Canopy,B,25,32,39,Bg1
-Y1 24,1,Footslope,Canopy,B,39,41,43,Bg2
-Y1 25,1,Footslope,Canopy,B,43,45.5,48,Bg3
-Y1 28,1,Footslope,Canopy,C,29,32,35,Bg1
-Y1 29,1,Footslope,Canopy,C,35,37.5,40,Bg2
-Y1 30,1,Footslope,Canopy,C,40,42.5,45,Bg3
-Y1 33,2,Low Backslope,Canopy,A,26,30.5,35,A
-Y1 34,2,Low Backslope,Canopy,A,35,37.5,40,Bg1
-Y1 35,2,Low Backslope,Canopy,A,40,42.5,45,Bg2
-Y1 37,2,Low Backslope,Canopy,B,19,31.5,44,Bg
-Y1 39,2,Low Backslope,Canopy,C,21,29.5,38,Bg1
-Y1 40,2,Low Backslope,Canopy,C,38,39.5,41,Bg2
-Y1 41,2,Low Backslope,Canopy,C,41,43,45,Bg3
-Y1 43,2,Low Backslope,Open,A,23,29,35,Bg1
-Y1 44,2,Low Backslope,Open,A,35,37,39,Bg2
-Y1 45,2,Low Backslope,Open,A,39,40.5,42,Bg3
-Y1 47,2,Low Backslope,Open,B,29,34.5,40,Bg1
-Y1 48,2,Low Backslope,Open,B,40,42,44,Bg2
-Y1 49,2,Low Backslope,Open,B,44,46,48,Bg3
-Y1 52,2,Low Backslope,Open,C,30,36.5,43,Bg1
-Y1 53,2,Low Backslope,Open,C,43,45.5,48,Bg2
-Y1 55,3,Backslope,Canopy,A,26,37.5,49,Bg1
-Y1 58,3,Backslope,Canopy,B,28,39,50,Bg1
-Y1 61,3,Backslope,Canopy,C,22,33,44,Bg1
-Y1 65,3,Backslope,Open,A,19,32.5,46,Bg1
-Y1 69,3,Backslope,Open,B,16,26,36,Bg1
-Y1 70,3,Backslope,Open,B,36,42,48,Bg2
-Y1 71,3,Backslope,Open,B,48,50.5,53,Bg3
-Y1 72,3,Backslope,Open,B,53,55,57,Bg4
-Y1 73,3,Backslope,Open,C,0,4,8,Bg
-Y1 76,3,Backslope,Open,D,19,24.5,30,Bg1
-Y1 77,3,Backslope,Open,D,30,36,42,Bg2
+ID,slopepos_num,slopepos,cover_type,rep,top_cm,mid_cm,bottom_cm,morph
+Y1 03,1,footslope,Open,A,42,45,48,Bg1
+Y1 04,1,footslope,Open,A,49,51.5,54,Bg2
+Y1 05,1,footslope,Open,A,54,56,58,Bg3
+Y1 08,1,footslope,Open,B,33,34,35,Oe/Bg
+Y1 09,1,footslope,Open,B,35,37,39,Bg1
+Y1 10,1,footslope,Open,B,39,41.5,44,Bg2
+Y1 13,1,footslope,Open,C,33,39,45,Bg1
+Y1 14,1,footslope,Open,C,45,47.5,50,Bg2
+Y1 15,1,footslope,Open,C,50,52,54,Bg3
+Y1 18,1,footslope,Canopy,A,29,33.5,38,Bg1
+Y1 19,1,footslope,Canopy,A,38,40.5,43,Bg2
+Y1 20,1,footslope,Canopy,A,43,45.5,48,Bg3
+Y1 23,1,footslope,Canopy,B,25,32,39,Bg1
+Y1 24,1,footslope,Canopy,B,39,41,43,Bg2
+Y1 25,1,footslope,Canopy,B,43,45.5,48,Bg3
+Y1 28,1,footslope,Canopy,C,29,32,35,Bg1
+Y1 29,1,footslope,Canopy,C,35,37.5,40,Bg2
+Y1 30,1,footslope,Canopy,C,40,42.5,45,Bg3
+Y1 33,2,low backslope,Canopy,A,26,30.5,35,A
+Y1 34,2,low backslope,Canopy,A,35,37.5,40,Bg1
+Y1 35,2,low backslope,Canopy,A,40,42.5,45,Bg2
+Y1 37,2,low backslope,Canopy,B,19,31.5,44,Bg
+Y1 39,2,low backslope,Canopy,C,21,29.5,38,Bg1
+Y1 40,2,low backslope,Canopy,C,38,39.5,41,Bg2
+Y1 41,2,low backslope,Canopy,C,41,43,45,Bg3
+Y1 43,2,low backslope,Open,A,23,29,35,Bg1
+Y1 44,2,low backslope,Open,A,35,37,39,Bg2
+Y1 45,2,low backslope,Open,A,39,40.5,42,Bg3
+Y1 47,2,low backslope,Open,B,29,34.5,40,Bg1
+Y1 48,2,low backslope,Open,B,40,42,44,Bg2
+Y1 49,2,low backslope,Open,B,44,46,48,Bg3
+Y1 52,2,low backslope,Open,C,30,36.5,43,Bg1
+Y1 53,2,low backslope,Open,C,43,45.5,48,Bg2
+Y1 55,3,backslope,Canopy,A,26,37.5,49,Bg1
+Y1 58,3,backslope,Canopy,B,28,39,50,Bg1
+Y1 61,3,backslope,Canopy,C,22,33,44,Bg1
+Y1 65,3,backslope,Open,A,19,32.5,46,Bg1
+Y1 69,3,backslope,Open,B,16,26,36,Bg1
+Y1 70,3,backslope,Open,B,36,42,48,Bg2
+Y1 71,3,backslope,Open,B,48,50.5,53,Bg3
+Y1 72,3,backslope,Open,B,53,55,57,Bg4
+Y1 73,3,backslope,Open,C,0,4,8,Bg
+Y1 76,3,backslope,Open,D,19,24.5,30,Bg1
+Y1 77,3,backslope,Open,D,30,36,42,Bg2

@@ -7,6 +7,7 @@ source("code/FTICR-0-packages.R")
 # 1. Load files-----------------------------------
 
 cn_data = read.csv("processed/Y1_CNperc.csv") 
+metadata = read.csv("processed/Y1_metadata.csv")
 
 # 2. Process data---------------------------------
 # remove n and separate sample IDs into multiple columns
@@ -28,6 +29,10 @@ cn_data_processed =
                                       grepl("C", canopy_slope)~"canopy")) %>% 
   select(-c(canopy_slope))
 
+metadata2 = 
+  metadata %>% 
+  separate(ID, sep = " ", into = c("site", "sample_num"))
+
 # 3. Analyse data and figures
 
 cn_data_tableanalysis =
@@ -43,7 +48,24 @@ cn_data_tableanalysis =
   na.omit() %>% 
   dplyr::select(-C_mean, -C_se, -N_mean, -N_se)
 
+cn_data_tableanalysis_horizonation =
+  cn_data_processed %>% 
+  left_join(metadata2, by = "sample_num") %>% 
+  group_by(slopepos.x, covertype, rep, morph.x) %>% 
+  dplyr::summarize(C_mean = round(mean(c_perc), 3),
+                   C_se = round(sd(c_perc)/sqrt(n()),3),
+                   N_mean = round(mean(n_perc), 3),
+                   N_se = round(sd(n_perc)/sqrt(n()),3),
+  ) %>% 
+  mutate(C_summary = paste(C_mean, "\u00b1", C_se),
+         N_summary = paste(N_mean, "\u00b1", N_se)) %>% 
+  na.omit() %>% 
+  dplyr::select(-C_mean, -C_se, -N_mean, -N_se)
 
 cn_data_tableanalysis %>% knitr::kable() # prints a somewhat clean table in the console
 
 write.csv(cn_data_tableanalysis, "output/cn_data_tableanalysis.csv", row.names = FALSE)
+
+cn_data_tableanalysis_horizonation %>% knitr::kable() # prints a somewhat clean table in the console
+
+write.csv(cn_data_tableanalysis_horizonation, "output/cn_data_tableanalysis_horizonation.csv", row.names = FALSE)

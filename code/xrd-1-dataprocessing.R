@@ -68,6 +68,34 @@ xrd_data_tableanalysis =
   #dplyr::select(-mean, -se)
 
 
+xrd_data_tableanalysis_horizonation =
+  xrd_data_processed %>%
+  dplyr::mutate(quartz = as.numeric(quartz),
+                albite = as.numeric(albite),
+                anorthite = as.numeric(anorthite),
+                microcline = as.numeric(microcline),
+                chlorite = as.numeric(chlorite),
+                mica = as.numeric(mica),
+                hornblende = as.numeric(hornblende),
+                ankerite = as.numeric(ankerite),
+                #rwp = as.numeric(rwp),
+                #feldspar_decimal = as.numeric(feldspar_decimal),
+  ) %>% 
+  left_join(metadata2, by = ) %>% 
+  #mutate(feldspar = (feldspar_decimal * 100)) %>% 
+  # select(-c(quartz_stdev, albite_stdev, anorthite_stdev, microcline_stdev,
+  #           chlorite_stdev, mica_stdev, hornblende_stdev, ankerite_stdev)) %>% 
+  pivot_longer(cols = c(quartz, albite, anorthite, microcline, chlorite, mica, hornblende,
+                        ankerite), names_to = "mineral", values_to = "abundance") %>% 
+  #group_by(slopepos, covertype, morph) %>% 
+  group_by(slopepos, covertype, mineral) %>% 
+  dplyr::summarize(mean = round(mean(abundance), 3),
+                   se = round(sd(abundance)/sqrt(n()),3)) %>% 
+  mutate(summary = paste(mean, "\u00b1", se)) %>% 
+  na.omit()
+#dplyr::select(-mean, -se)
+
+
 xrd_stats = 
   xrd_data_processed %>% 
   dplyr::mutate(quartz = as.numeric(quartz),
