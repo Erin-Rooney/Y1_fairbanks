@@ -7,11 +7,17 @@ source("code/FTICR-0-packages.R")
 # 1. Load files-----------------------------------
 
 xrd_data = read.csv("processed/xrd_data.csv") 
+metadata = read.csv("processed/Y1_metadata.csv")
+
 
 # 2. Process data---------------------------------
 # remove n and separate sample IDs into multiple columns
 # grepl for canopy and slope columns
 # LDC and LDA are typos from xrd analysis input, should be LOA and LOC, fixed with recode
+
+metadata2 = 
+  metadata %>% 
+  separate(ID, sep = " ", into = c("site", "sample_num"))
 
 xrd_data_processed =
   xrd_data %>% 
@@ -81,19 +87,28 @@ xrd_data_tableanalysis_horizonation =
                 #rwp = as.numeric(rwp),
                 #feldspar_decimal = as.numeric(feldspar_decimal),
   ) %>% 
-  left_join(metadata2, by = ) %>% 
+  mutate(sample_num = recode(sample_num, 'Y10B' = 'Y108')) %>% 
+  mutate(sample_num = stringi::stri_replace_all_fixed(sample_num, "Y1","")) %>% 
+  na.omit() %>% 
+  left_join(metadata2, by = "sample_num") %>% 
   #mutate(feldspar = (feldspar_decimal * 100)) %>% 
   # select(-c(quartz_stdev, albite_stdev, anorthite_stdev, microcline_stdev,
   #           chlorite_stdev, mica_stdev, hornblende_stdev, ankerite_stdev)) %>% 
   pivot_longer(cols = c(quartz, albite, anorthite, microcline, chlorite, mica, hornblende,
                         ankerite), names_to = "mineral", values_to = "abundance") %>% 
   #group_by(slopepos, covertype, morph) %>% 
-  group_by(slopepos, covertype, mineral) %>% 
-  dplyr::summarize(mean = round(mean(abundance), 3),
-                   se = round(sd(abundance)/sqrt(n()),3)) %>% 
-  mutate(summary = paste(mean, "\u00b1", se)) %>% 
+  group_by(slopepos.x, covertype, rep, morph.x, mineral) %>% 
+  # dplyr::summarize(mean = round(mean(abundance), 3),
+  #                  se = round(sd(abundance)/sqrt(n()),3)) %>%
+  dplyr::summarize(mean = round(mean(abundance), 3)) %>% 
+  # mutate(summary = paste(mean, "\u00b1", se)) %>% 
   na.omit()
 #dplyr::select(-mean, -se)
+
+xrd_data_tableanalysis_horizonation %>% knitr::kable() # prints a somewhat clean table in the console
+
+write.csv(xrd_data_tableanalysis_horizonation, "output/xrd_data_tableanalysis_horizonation.csv", row.names = FALSE)
+
 
 
 xrd_stats = 
