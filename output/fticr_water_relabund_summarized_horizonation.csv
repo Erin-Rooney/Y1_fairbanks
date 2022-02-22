@@ -1,0 +1,161 @@
+"slopepos","cover_type","Class","plot","ID","relabundance","se"
+"Backslope","closed","aliphatic","A",55,43.81,NA
+"Backslope","closed","aliphatic","B",58,35.44,NA
+"Backslope","closed","aliphatic","C",61,37.11,NA
+"Backslope","closed","unsaturated/lignin","A",55,48.27,NA
+"Backslope","closed","unsaturated/lignin","B",58,55.83,NA
+"Backslope","closed","unsaturated/lignin","C",61,54.44,NA
+"Backslope","closed","aromatic","A",55,1.73,NA
+"Backslope","closed","aromatic","B",58,6.38,NA
+"Backslope","closed","aromatic","C",61,2.22,NA
+"Backslope","closed","condensed aromatic","A",55,6.19,NA
+"Backslope","closed","condensed aromatic","B",58,2.36,NA
+"Backslope","closed","condensed aromatic","C",61,6.22,NA
+"Backslope","open","aliphatic","A",65,29.2,NA
+"Backslope","open","aliphatic","B",70,13.12,NA
+"Backslope","open","aliphatic","B",71,13.12,NA
+"Backslope","open","aliphatic","B",72,13.12,NA
+"Backslope","open","aliphatic","C",73,46.84,NA
+"Backslope","open","unsaturated/lignin","A",65,55.41,NA
+"Backslope","open","unsaturated/lignin","B",70,17.94,NA
+"Backslope","open","unsaturated/lignin","B",71,17.94,NA
+"Backslope","open","unsaturated/lignin","B",72,17.94,NA
+"Backslope","open","unsaturated/lignin","C",73,48.09,NA
+"Backslope","open","aromatic","A",65,3.85,NA
+"Backslope","open","aromatic","B",70,0.27,NA
+"Backslope","open","aromatic","B",71,0.27,NA
+"Backslope","open","aromatic","B",72,0.27,NA
+"Backslope","open","aromatic","C",73,4.08,NA
+"Backslope","open","condensed aromatic","A",65,11.54,NA
+"Backslope","open","condensed aromatic","B",70,2.01,NA
+"Backslope","open","condensed aromatic","B",71,2.01,NA
+"Backslope","open","condensed aromatic","B",72,2.01,NA
+"Backslope","open","condensed aromatic","C",73,0.99,NA
+"Low Backslope","closed","aliphatic","A",33,10.35,NA
+"Low Backslope","closed","aliphatic","A",34,10.21,NA
+"Low Backslope","closed","aliphatic","A",35,10.11,NA
+"Low Backslope","closed","aliphatic","B",37,34.27,NA
+"Low Backslope","closed","aliphatic","C",39,8.87,NA
+"Low Backslope","closed","aliphatic","C",40,9.05,NA
+"Low Backslope","closed","aliphatic","C",41,8.11,NA
+"Low Backslope","closed","unsaturated/lignin","A",33,22.02,NA
+"Low Backslope","closed","unsaturated/lignin","A",34,19.33,NA
+"Low Backslope","closed","unsaturated/lignin","A",35,19.28,NA
+"Low Backslope","closed","unsaturated/lignin","B",37,53.1,NA
+"Low Backslope","closed","unsaturated/lignin","C",39,21.87,NA
+"Low Backslope","closed","unsaturated/lignin","C",40,21.76,NA
+"Low Backslope","closed","unsaturated/lignin","C",41,19.51,NA
+"Low Backslope","closed","aromatic","A",33,1.8,NA
+"Low Backslope","closed","aromatic","A",34,1.18,NA
+"Low Backslope","closed","aromatic","A",35,1.32,NA
+"Low Backslope","closed","aromatic","B",37,7.82,NA
+"Low Backslope","closed","aromatic","C",39,2.5,NA
+"Low Backslope","closed","aromatic","C",40,2.5,NA
+"Low Backslope","closed","aromatic","C",41,1.99,NA
+"Low Backslope","closed","condensed aromatic","A",33,1.56,NA
+"Low Backslope","closed","condensed aromatic","A",34,1.61,NA
+"Low Backslope","closed","condensed aromatic","A",35,1.23,NA
+"Low Backslope","closed","condensed aromatic","B",37,4.82,NA
+"Low Backslope","closed","condensed aromatic","C",39,0.87,NA
+"Low Backslope","closed","condensed aromatic","C",40,1.52,NA
+"Low Backslope","closed","condensed aromatic","C",41,1.45,NA
+"Low Backslope","open","aliphatic","A",43,13.55,NA
+"Low Backslope","open","aliphatic","A",44,16.38,NA
+"Low Backslope","open","aliphatic","A",45,14.9,NA
+"Low Backslope","open","aliphatic","B",47,9.6,NA
+"Low Backslope","open","aliphatic","B",48,9.68,NA
+"Low Backslope","open","aliphatic","B",49,9.49,NA
+"Low Backslope","open","aliphatic","C",52,14.92,NA
+"Low Backslope","open","aliphatic","C",53,14.92,NA
+"Low Backslope","open","unsaturated/lignin","A",43,15.54,NA
+"Low Backslope","open","unsaturated/lignin","A",44,17.92,NA
+"Low Backslope","open","unsaturated/lignin","A",45,16.12,NA
+"Low Backslope","open","unsaturated/lignin","B",47,21.23,NA
+"Low Backslope","open","unsaturated/lignin","B",48,21.42,NA
+"Low Backslope","open","unsaturated/lignin","B",49,20.39,NA
+"Low Backslope","open","unsaturated/lignin","C",52,31.92,NA
+"Low Backslope","open","unsaturated/lignin","C",53,31.92,NA
+"Low Backslope","open","aromatic","A",43,0.58,NA
+"Low Backslope","open","aromatic","A",44,0.71,NA
+"Low Backslope","open","aromatic","A",45,0.77,NA
+"Low Backslope","open","aromatic","B",47,1.75,NA
+"Low Backslope","open","aromatic","B",48,1.33,NA
+"Low Backslope","open","aromatic","B",49,1.71,NA
+"Low Backslope","open","aromatic","C",52,1.54,NA
+"Low Backslope","open","aromatic","C",53,1.54,NA
+"Low Backslope","open","condensed aromatic","A",43,0.83,NA
+"Low Backslope","open","condensed aromatic","A",44,1.22,NA
+"Low Backslope","open","condensed aromatic","A",45,1.48,NA
+"Low Backslope","open","condensed aromatic","B",47,1.11,NA
+"Low Backslope","open","condensed aromatic","B",48,1.07,NA
+"Low Backslope","open","condensed aromatic","B",49,1.22,NA
+"Low Backslope","open","condensed aromatic","C",52,1.62,NA
+"Low Backslope","open","condensed aromatic","C",53,1.62,NA
+"Footslope","closed","aliphatic","A",18,10.48,NA
+"Footslope","closed","aliphatic","A",19,8.58,NA
+"Footslope","closed","aliphatic","A",20,10.44,NA
+"Footslope","closed","aliphatic","B",23,6.98,NA
+"Footslope","closed","aliphatic","B",24,10.35,NA
+"Footslope","closed","aliphatic","B",25,10.08,NA
+"Footslope","closed","aliphatic","C",28,9.86,NA
+"Footslope","closed","aliphatic","C",29,8.57,NA
+"Footslope","closed","aliphatic","C",30,8.57,NA
+"Footslope","closed","unsaturated/lignin","A",18,22.58,NA
+"Footslope","closed","unsaturated/lignin","A",19,18.6,NA
+"Footslope","closed","unsaturated/lignin","A",20,22.35,NA
+"Footslope","closed","unsaturated/lignin","B",23,19.35,NA
+"Footslope","closed","unsaturated/lignin","B",24,21.34,NA
+"Footslope","closed","unsaturated/lignin","B",25,21.02,NA
+"Footslope","closed","unsaturated/lignin","C",28,21.45,NA
+"Footslope","closed","unsaturated/lignin","C",29,20.71,NA
+"Footslope","closed","unsaturated/lignin","C",30,21.39,NA
+"Footslope","closed","aromatic","A",18,1.74,NA
+"Footslope","closed","aromatic","A",19,1.24,NA
+"Footslope","closed","aromatic","A",20,1.55,NA
+"Footslope","closed","aromatic","B",23,2.02,NA
+"Footslope","closed","aromatic","B",24,2.71,NA
+"Footslope","closed","aromatic","B",25,2.71,NA
+"Footslope","closed","aromatic","C",28,2.46,NA
+"Footslope","closed","aromatic","C",29,1.99,NA
+"Footslope","closed","aromatic","C",30,2.37,NA
+"Footslope","closed","condensed aromatic","A",18,0.73,NA
+"Footslope","closed","condensed aromatic","A",19,0.66,NA
+"Footslope","closed","condensed aromatic","A",20,1.04,NA
+"Footslope","closed","condensed aromatic","B",23,0.91,NA
+"Footslope","closed","condensed aromatic","B",24,1.27,NA
+"Footslope","closed","condensed aromatic","B",25,1.24,NA
+"Footslope","closed","condensed aromatic","C",28,0.76,NA
+"Footslope","closed","condensed aromatic","C",29,0.91,NA
+"Footslope","closed","condensed aromatic","C",30,0.97,NA
+"Footslope","open","aliphatic","A",3,14.8,NA
+"Footslope","open","aliphatic","A",4,14.8,NA
+"Footslope","open","aliphatic","B",8,7.81,NA
+"Footslope","open","aliphatic","B",9,7.63,NA
+"Footslope","open","aliphatic","B",10,7.38,NA
+"Footslope","open","aliphatic","C",13,7.94,NA
+"Footslope","open","aliphatic","C",14,10.99,NA
+"Footslope","open","aliphatic","C",15,10.44,NA
+"Footslope","open","unsaturated/lignin","A",3,33.33,NA
+"Footslope","open","unsaturated/lignin","A",4,33.33,NA
+"Footslope","open","unsaturated/lignin","B",8,23.12,NA
+"Footslope","open","unsaturated/lignin","B",9,22.63,NA
+"Footslope","open","unsaturated/lignin","B",10,20.98,NA
+"Footslope","open","unsaturated/lignin","C",13,20.11,NA
+"Footslope","open","unsaturated/lignin","C",14,22.61,NA
+"Footslope","open","unsaturated/lignin","C",15,23.1,NA
+"Footslope","open","aromatic","A",3,0.62,NA
+"Footslope","open","aromatic","A",4,0.62,NA
+"Footslope","open","aromatic","B",8,2.61,NA
+"Footslope","open","aromatic","B",9,2.33,NA
+"Footslope","open","aromatic","B",10,2.33,NA
+"Footslope","open","aromatic","C",13,0.73,NA
+"Footslope","open","aromatic","C",14,0.73,NA
+"Footslope","open","aromatic","C",15,0.91,NA
+"Footslope","open","condensed aromatic","A",3,1.24,NA
+"Footslope","open","condensed aromatic","A",4,1.24,NA
+"Footslope","open","condensed aromatic","B",8,1.06,NA
+"Footslope","open","condensed aromatic","B",9,1,NA
+"Footslope","open","condensed aromatic","B",10,1.12,NA
+"Footslope","open","condensed aromatic","C",13,0.86,NA
+"Footslope","open","condensed aromatic","C",14,0.59,NA
+"Footslope","open","condensed aromatic","C",15,1,NA

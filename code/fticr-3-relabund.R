@@ -9,7 +9,8 @@ source("code/FTICR-0-packages.R")
 
 #replaced ID with plot in line 12, moved plot to beginning (it was already at the end of line 12)
 
-fticr_data_water = read.csv("fticr_data_water.csv") %>% select(plot, formula, slopepos, cover_type) 
+fticr_data_water = read.csv("fticr_data_water.csv") %>% select(plot, formula, slopepos, cover_type)
+# fticr_data_water = read.csv("fticr_data_water.csv") %>% select(plot, formula, slopepos, cover_type, ID) 
 fticr_meta_water = read.csv("fticr_meta_water.csv")
 #meta_hcoc_water  = read.csv("fticr_meta_hcoc_water.csv") %>% select(-Mass)
 ### ^^ the files above have aliph as well as aromatic for the same sample, which can be confusing/misleading
@@ -52,11 +53,25 @@ mutate(slopepos = factor(slopepos, levels = c("Backslope", "Low Backslope", "Foo
 fticr_water_relabund_summarized = 
   fticr_water_relabund %>% 
   mutate(Class = factor(Class, levels = c("aliphatic", "unsaturated/lignin", "aromatic", "condensed aromatic"))) %>% 
-  group_by(slopepos, cover_type, Class) %>% 
+  group_by(slopepos, cover_type, Class, plot) %>% 
   dplyr::summarise(relabundance = round(mean(relabund), 2),
                    se = round(sd(relabund)/sqrt(n()),2))
 
+# fticr_water_relabund_summarized %>% knitr::kable() # prints a somewhat clean table in the console
+# 
+# write.csv(fticr_water_relabund_summarized, "output/fticr_water_relabund_summarized_horizonation.csv", row.names = FALSE)
 
+metadata = read.csv("processed/Y1_metadata.csv")
+horizonation_relabund = read.csv("output/fticr_water_relabund_summarized_horizonation.csv")
+
+metadata2 = 
+  metadata %>% 
+  separate(ID, sep = " ", into = c("site", "ID")) %>% 
+  mutate(ID = as.integer(ID))
+
+relabund_metadatacombo =
+  horizonation_relabund %>% 
+  left_join(metadata2, by = 'ID')
 
 #2c. aromatic relabund --- do this later.
 
