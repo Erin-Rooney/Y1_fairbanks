@@ -32,7 +32,8 @@ fticr_water_relabund =
   left_join(select(fticr_meta_water, formula, Class), by = "formula") %>% 
   ## create a column for group counts
   #mutate(Class = factor(Class, levels = c("aliphatic", "unsaturated/lignin", "aromatic", "condensed aromatic"))) %>% 
-  group_by(plot, slopepos, cover_type, Class) %>% 
+  group_by(slopepos, cover_type, plot, Class) %>%
+  # group_by(ID, Class) %>% 
   dplyr::summarize(counts = n()) %>% 
   ## create a column for total counts
   group_by(plot, slopepos, cover_type) %>%
@@ -53,39 +54,11 @@ mutate(slopepos = factor(slopepos, levels = c("Backslope", "Low Backslope", "Foo
 fticr_water_relabund_summarized = 
   fticr_water_relabund %>% 
   mutate(Class = factor(Class, levels = c("aliphatic", "unsaturated/lignin", "aromatic", "condensed aromatic"))) %>% 
-  group_by(slopepos, cover_type, Class, plot) %>% 
+  group_by(slopepos, cover_type, plot, Class) %>% 
+  #group_by(ID, Class) %>% 
   dplyr::summarise(relabundance = round(mean(relabund), 2),
                    se = round(sd(relabund)/sqrt(n()),2))
 
-# fticr_water_relabund_summarized %>% knitr::kable() # prints a somewhat clean table in the console
-# 
-# write.csv(fticr_water_relabund_summarized, "output/fticr_water_relabund_summarized_horizonation.csv", row.names = FALSE)
-
-metadata = read.csv("processed/Y1_metadata.csv")
-horizonation_relabund = read.csv("output/fticr_water_relabund_summarized_horizonation.csv")
-
-metadata2 = 
-  metadata %>% 
-  separate(ID, sep = " ", into = c("site", "ID")) %>% 
-  mutate(ID = as.integer(ID)) %>% 
-  mutate(cover_type = recode(cover_type, "Canopy" = "closed"),
-         cover_type = recode(cover_type, "Open" = "open")) %>% 
-  rename(plot = rep)
-
-relabund_metadatacombo =
-  horizonation_relabund %>% 
-  left_join(metadata2, by = c("ID", "plot", "cover_type")) %>% 
-  select(-se, -slopepos_num, -site, -slopepos.y, -ID, -mid_cm) %>% 
-  pivot_wider(names_from = 'Class', values_from = "relabundance") %>% 
-  mutate(depth = paste(top_cm, "-", bottom_cm)) %>% 
-  select(-top_cm, -bottom_cm)
-
-##something incorrect with depth. Backslope rep C Bg horizon is NOT 0-8 cm
-##likely a result of having FOUR reps due to sampling issues (rep C was not sampled, rep D was, but it referred to as rep C in analysis)
-
-relabund_metadatacombo %>% knitr::kable() # prints a somewhat clean table in the console
-
-write.csv(relabund_metadatacombo, "output/relabund_horizonation.csv", row.names = FALSE)
 
 #2c. aromatic relabund --- do this later.
 
