@@ -40,6 +40,6 @@ Y1 69,3,backslope,Open,B,16,26,36,Bg1
 Y1 70,3,backslope,Open,B,36,42,48,Bg2
 Y1 71,3,backslope,Open,B,48,50.5,53,Bg3
 Y1 72,3,backslope,Open,B,53,55,57,Bg4
-Y1 73,3,backslope,Open,C,0,4,8,Bg
-Y1 76,3,backslope,Open,D,19,24.5,30,Bg1
+Y1 73,3,backslope,Open,C,0,4,8,Oi
 Y1 77,3,backslope,Open,D,30,36,42,Bg2
+Y1 78,3,backslope,Open,D,42,51,60,Bg1
