@@ -6,6 +6,7 @@
 source("code/FTICR-0-packages.R")
 
 fticr_data_water = read.csv("fticr_data_water.csv") %>% select(plot, formula, slopepos, cover_type, ID) 
+fticr_meta_water = read.csv("fticr_meta_water.csv")
 
 
 fticr_water_relabund = 
@@ -28,6 +29,7 @@ fticr_water_relabund %>% knitr::kable() # prints a somewhat clean table in the c
 write.csv(fticr_water_relabund, "output/fticr_water_relabund_summarized_horizonation.csv", row.names = FALSE)
 
 metadata = read.csv("processed/Y1_metadata.csv")
+#metadata rep C was deleted because it is 0-8 cm of organic horizon. Not part of analysis.
 horizonation_relabund = read.csv("output/fticr_water_relabund_summarized_horizonation.csv")
 
 metadata2 = 
