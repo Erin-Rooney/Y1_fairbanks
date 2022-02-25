@@ -5,7 +5,7 @@
 #load packages
 source("code/FTICR-0-packages.R")
 
-fticr_data_water = read.csv("fticr_data_water.csv") %>% select(plot, formula, slopepos, cover_type, ID) 
+fticr_data_water = read.csv("fticr_data_water.csv") #%>% select(plot, formula, slopepos, cover_type, ID) 
 fticr_meta_water = read.csv("fticr_meta_water.csv")
 metadata = read.csv("processed/Y1_metadata.csv")
 
