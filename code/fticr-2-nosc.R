@@ -80,14 +80,14 @@ fticr_water_slopepos_unique =
   # n = 1 means unique to CON or FTC Trtmt
   # n = 2 means common to both
   filter(n == 1) %>% 
-  mutate(uniquepeak = case_when(slopepos == 'Backslope' ~ "backslope",
-                               slopepos == 'Low Backslope' ~ "low backslope",
-                               slopepos == 'Footslope' ~ "footslope")) %>% 
+  mutate(uniquepeak = case_when(slopepos == 'backslope' ~ "backslope",
+                               slopepos == 'low backslope' ~ "low backslope",
+                               slopepos == 'footslope' ~ "footslope")) %>% 
   left_join(meta_hcoc_water) %>% 
-  mutate(slopepos = factor (slopepos, levels = c("Backslope", "Low Backslope", "Footslope")))
+  mutate(slopepos = factor (slopepos, levels = c("backslope", "low backslope", "footslope")))
 
 fticr_water_slopepos_unique %>% 
-  mutate(slopepos = factor (slopepos, levels = c("Footslope", "Low Backslope","Backslope"))) %>% 
+  mutate(slopepos = factor (slopepos, levels = c("footslope", "low backslope","backslope"))) %>% 
   ggplot(aes(y = NOSC, x = slopepos, fill = slopepos)) +
   geom_boxplot(alpha = 0.5)+
   geom_jitter(width = 0.2, alpha = 0.7, size = 0.5)+
@@ -99,26 +99,6 @@ fticr_water_slopepos_unique %>%
   scale_color_manual(values = PNWColors::pnw_palette("Bay", 3))+
   facet_grid(cover_type~.)
 
-
-backslope_unique_nosc = 
-  fticr_water_slopepos_unique %>% 
-  mutate(cover_type = recode(cover_type, "Canopy" = "closed"),
-         cover_type = recode(cover_type, "Open" = "open")) %>% 
-  #mutate(slopepos = factor (slopepos, levels = c("Footslope", "Low Backslope","Backslope"))) %>%
-  filter(slopepos %in% "Backslope") %>% 
-  ggplot(aes(y = NOSC, x = cover_type, fill = cover_type)) +
-  geom_boxplot(alpha = 0.5)+
-  geom_jitter(width = 0.2, alpha = 0.7, size = 0.5)+
-  labs(x = "")+
-  scale_fill_manual(values = c('#006d77', '#e29578'))+
-  #geom_boxplot(aes(y = 800), width = 100, fill = NA)+
-  #facet_grid(Material ~ .) +
-  theme_er() +
-  theme(legend.position = "bottom", panel.border = element_rect(color="white",size=0.2, fill = NA))
-
-
-ggsave("output/backslope_unique_nosc.tiff", plot = backslope_unique_nosc, height = 3, width = 3)
-ggsave("output/backslope_unique_nosc.jpeg", plot = backslope_unique_nosc, height = 3, width = 3)
 
 
 unique_nosc = 
@@ -148,7 +128,7 @@ library(nlme)
 backslope_unique_nosc_stats = 
   fticr_water_slopepos_unique %>% 
   #mutate(slopepos = factor (slopepos, levels = c("Footslope", "Low Backslope","Backslope"))) %>%
-  filter(slopepos %in% "Backslope") 
+  filter(slopepos %in% "backslope") 
 
 aov_backslope = aov(NOSC ~ cover_type, data = backslope_unique_nosc_stats)
 summary(aov_backslope)
