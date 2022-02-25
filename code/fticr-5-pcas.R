@@ -18,9 +18,9 @@ meta_hcoc_water  = read.csv("fticr_meta_hcoc_water.csv") %>% select(-Mass)
 fticr_water = 
   fticr_data_water %>% 
   select(ID, formula, slopepos, cover_type, plot) %>% 
-  mutate(slopenum = recode(slopepos, "Backslope" = "1-Backslope",
-                           "Low Backslope" = "2-Low Backslope",
-                           "Footslope" = "3-Footslope"))
+  mutate(slopenum = recode(slopepos, "backslope" = "1-backslope",
+                           "low backslope" = "2-low backslope",
+                           "footslope" = "3-footslope"))
 
 fticr_data_water_summarized = 
   fticr_water %>% 
