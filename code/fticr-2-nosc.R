@@ -15,7 +15,8 @@ meta_hcoc_water  = read.csv("fticr_meta_hcoc_water.csv")
 # 2. NOSC and AImod plots_water-------------------------------
 fticr_water = 
   fticr_data_water %>% 
-  select(formula, slopepos, cover_type, plot) 
+  select(formula, slopepos, cover_type, plot) %>% 
+  na.omit()
 
 fticr_data_water_summarized = 
   fticr_water %>% 
