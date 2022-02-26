@@ -16,7 +16,8 @@ meta_hcoc_water  = read.csv("fticr_meta_hcoc_water.csv") %>% select(-Mass)
 
 fticr_water = 
   fticr_data_water %>% 
-  select(ID, formula, slopepos, cover_type, plot) 
+  select(ID, formula, slopepos, cover_type, plot) %>% 
+  na.omit()
 
 fticr_data_water_summarized = 
   fticr_water %>% 
@@ -136,7 +137,6 @@ fticr_water_covertype_unique_common =
 
 uniquepeaks_vankrev = 
   fticr_water_covertype_unique %>%
-  #filter(slopepos %in% "Backslope") %>% 
   ggplot(aes(x = OC, y = HC, color = loss_gain))+
   geom_point(alpha = 0.2, size = 1)+
   stat_ellipse(show.legend = F)+

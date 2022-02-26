@@ -43,7 +43,8 @@ fticr_water_relabund =
          relabund = round(relabund, 2)) %>% 
 mutate(slopepos = factor(slopepos, levels = c("backslope", "low backslope", "footslope"))) %>% 
   mutate(cover_type = recode(cover_type, "Canopy" = "closed"),
-         cover_type = recode(cover_type, "Open" = "open")) 
+         cover_type = recode(cover_type, "Open" = "open")) %>% 
+  na.omit()
   
 
 
@@ -163,7 +164,7 @@ relabund_aov_covertype =
   do(fit_aov_open(.))
 
 
-#slopepos
+#slopepos great, this one just stopped working. what the fuck. 2 25 2022 8:10 pm
 
 relabund_hsd_slopepos = 
   fticr_water_relabund %>% 
@@ -191,7 +192,7 @@ relabund_table_with_aov_covertype =
   pivot_wider(names_from = "slopepos", values_from = "value") %>% 
   force()
 
-# working
+# working, nope NOT WORKING. Of course it's not working. 2 25 2022 8:13 pm
 relabund_table_with_hsd_slopepos = 
   relabund_table_covertype %>% 
   left_join(relabund_hsd_slopepos) %>%
