@@ -123,7 +123,6 @@ fticr_data_water =
   # alternatively, use `starts_with()` if all your sample names start with the same prefix
   # dplyr::select(Mass,starts_with("FT")) %>% 
   melt(id = c("Mass"), value.name = "presence", variable.name = "ID") %>%
-  separate(ID, sep = "_", into = c("site_col", "ID", "W")) %>% 
   # convert intensities to presence==1/absence==0  
   dplyr::mutate(presence = if_else(presence>0,1,0)) %>% 
   # keep only peaks present
@@ -133,6 +132,7 @@ fticr_data_water =
   dplyr::select(-Mass,-formula, -presence, Mass,formula,presence) %>% 
   # separate COREID for easy left_join
   #separate(ID, sep = " ", into = c("site", "ID")) %>% 
+  separate(ID, sep = "_", into = c("site_col", "ID", "W")) %>% 
   left_join(fticr_keycleaned, by = "ID") %>% 
    rename(max_reps = reps) %>% 
   dplyr::select(-Mass) %>% 
@@ -141,7 +141,8 @@ fticr_data_water =
   dplyr::mutate(formulareps = n()) %>% 
   # set up replication filter for 2/3 of max_rep
   ungroup() %>% 
-  mutate(include = formulareps >= (2/3)*max_reps) %>% 
+  mutate(include = formulareps >= 1) %>% 
+  #(mutate(include = formulareps >= 2/3)*max_reps)
   
   
   ## mutate(include = formulareps > 1,
