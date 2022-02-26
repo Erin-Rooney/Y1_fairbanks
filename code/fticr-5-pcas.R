@@ -20,7 +20,8 @@ fticr_water =
   select(ID, formula, slopepos, cover_type, plot) %>% 
   mutate(slopenum = recode(slopepos, "backslope" = "1-backslope",
                            "low backslope" = "2-low backslope",
-                           "footslope" = "3-footslope"))
+                           "footslope" = "3-footslope")) %>% 
+  na.omit()
 
 fticr_data_water_summarized = 
   fticr_water %>% 
@@ -112,5 +113,6 @@ pca_fig_legend = ggbiplot(pca, obs.scale = 1, var.scale = 1,
   NULL
 
 ggsave("output/pcafiglegend.tiff", plot = pca_fig_legend, height = 5, width = 8)
+
 
 
