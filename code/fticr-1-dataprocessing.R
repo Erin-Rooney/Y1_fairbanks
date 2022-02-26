@@ -49,22 +49,23 @@ fticr_key =
 
 # core key for fticr ------------------------------------------------------
 
-fticr_reps = 
+fticr_keycleaned = 
   fticr_key %>% 
   # calculate reps per treatment grouping
   # select(-rep) %>% 
-  group_by(slopepos, cover_type, rep) %>% 
+  rename(plot = 'rep') %>% 
+  group_by(slopepos, cover_type, plot) %>% 
   dplyr::mutate(reps = n()) %>% 
   # separate ID column into many
   #separate(ID, sep = " ", into = c("FT", "ID")) %>% 
   # keep only the necessary columns
-  select(ID, slopepos, cover_type, mid_cm, reps) %>% 
-  rename(plot = 'rep')
-
- fticr_key = 
-   fticr_key %>% 
-   rename(plot = 'rep') %>% 
-   select(plot, ID, slopepos, cover_type, mid_cm) 
+  select(ID, slopepos, cover_type, plot, mid_cm, reps) 
+  
+#commenting out, moved rename of rep to plot to line 56, before mutate reps
+ # fticr_key = 
+ #   fticr_key %>% 
+ #   rename(plot = 'rep') %>% 
+ #   select(plot, ID, slopepos, cover_type, mid_cm) 
    
 # Assemble reports WATER------------------------------
 fticr_report_water = 
@@ -128,22 +129,20 @@ fticr_data_water =
   # keep only peaks present
   filter(presence>0) %>% 
   left_join(dplyr::select(fticr_meta_water, Mass,formula), by = "Mass")  %>% 
-  left_join(fticr_key, by = "ID") %>% 
   # rearrange columns
   dplyr::select(-Mass,-formula, -presence, Mass,formula,presence) %>% 
   # separate COREID for easy left_join
-  #separate(ID, sep = "_", into = c("site_col", "ID", "W")) %>% 
-  # filter only FT
-  # filter(FT_col == "FT")
-  #filter(FT_col %in% "FT") %>% 
-  # left_join(fticr_reps, by = "field_ID") %>% 
-  left_join(fticr_reps) %>% 
-  rename(max_reps = reps) %>% 
+  #separate(ID, sep = " ", into = c("site", "ID")) %>% 
+  left_join(fticr_keycleaned, by = "ID") %>% 
+   rename(max_reps = reps) %>% 
+  dplyr::select(-Mass) %>% 
+  distinct() %>% 
   group_by(slopepos, cover_type, plot, formula) %>% 
   dplyr::mutate(formulareps = n()) %>% 
   # set up replication filter for 2/3 of max_rep
   ungroup() %>% 
   mutate(include = formulareps >= (2/3)*max_reps) %>% 
+  
   
   ## mutate(include = formulareps > 1,
   ##        occurrence = case_when(formulareps == max_reps ~ "3/3",
@@ -153,7 +152,7 @@ fticr_data_water =
   filter(include)
 
 
-
+#left_join(fticr_keycleaned, by = "ID") %>% 
 
 # now we want only peaks that are in 3 of the 5 replicates
 # group by the treatment levels  
