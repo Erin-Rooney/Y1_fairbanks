@@ -1,6 +1,6 @@
 # 3-12-2021
 # FTICR
-# Van Krevelin
+# Van Krevelen
 # y1 fairbanks
 
 #load packages
@@ -68,7 +68,7 @@ vankrev_method =
   theme(panel.border = element_rect(color="black",size=0.5, fill = NA), legend.position = "none")+
   NULL
 
-ggsave("output/vankrev_method.tiff", plot = vankrev_method, height = 4.5, width = 5)
+ggsave("output/vankrev_method.tiff", plot = vankrev_method, height = 6, width = 6.5)
 
 
 vankrev_covertype = 

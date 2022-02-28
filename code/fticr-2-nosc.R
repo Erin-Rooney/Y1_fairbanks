@@ -12,6 +12,7 @@ fticr_data_water = read.csv("fticr_data_water.csv")
 fticr_meta_water = read.csv("fticr_meta_water.csv")
 meta_hcoc_water  = read.csv("fticr_meta_hcoc_water.csv")
 
+
 # 2. NOSC and AImod plots_water-------------------------------
 fticr_water = 
   fticr_data_water %>% 

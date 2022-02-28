@@ -134,15 +134,15 @@ fticr_data_water =
   #separate(ID, sep = " ", into = c("site", "ID")) %>% 
   separate(ID, sep = "_", into = c("site_col", "ID", "W")) %>% 
   left_join(fticr_keycleaned, by = "ID") %>% 
-   rename(max_reps = reps) %>% 
+  rename(max_reps = reps) %>% 
   dplyr::select(-Mass) %>% 
   distinct() %>% 
-  group_by(slopepos, cover_type, plot, formula) %>% 
+  group_by(slopepos, cover_type, formula) %>% 
   dplyr::mutate(formulareps = n()) %>% 
   # set up replication filter for 2/3 of max_rep
   ungroup() %>% 
-  mutate(include = formulareps >= 1) %>% 
-  #(mutate(include = formulareps >= 2/3)*max_reps)
+  #mutate(include = formulareps >= 1) %>% 
+  mutate(include = formulareps >= (2/3)* max_reps) %>% 
   
   
   ## mutate(include = formulareps > 1,

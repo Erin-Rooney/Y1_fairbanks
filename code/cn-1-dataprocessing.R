@@ -69,3 +69,18 @@ write.csv(cn_data_tableanalysis, "output/cn_data_tableanalysis.csv", row.names =
 cn_data_tableanalysis_horizonation %>% knitr::kable() # prints a somewhat clean table in the console
 
 write.csv(cn_data_tableanalysis_horizonation, "output/cn_data_tableanalysis_horizonation.csv", row.names = FALSE)
+
+#####stats
+
+c_aov <- aov(c_perc ~ covertype*slopepos, data = cn_data_processed)
+summary.aov(c_aov)
+
+c_hsd = HSD.test(c_aov, "slopepos")
+print(c_hsd)
+
+n_aov <- aov(n_perc ~ covertype*slopepos, data = cn_data_processed)
+summary.aov(n_aov)
+
+n_hsd = HSD.test(n_aov, "slopepos")
+print(n_hsd)
+
