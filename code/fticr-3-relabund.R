@@ -192,7 +192,8 @@ relabund_table_with_aov_covertype =
   pivot_wider(names_from = "slopepos", values_from = "value") %>% 
   force()
 
-# working, nope NOT WORKING. Of course it's not working. 2 25 2022 8:13 pm
+# working again as of 2 28 2022 11:30 am
+
 relabund_table_with_hsd_slopepos = 
   relabund_table_covertype %>% 
   left_join(relabund_hsd_slopepos) %>%

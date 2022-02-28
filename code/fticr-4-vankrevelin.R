@@ -33,6 +33,16 @@ fticr_water_hcoc =
   mutate(cover_type = recode(cover_type, "Canopy" = "closed"),
          cover_type = recode(cover_type, "Open" = "open")) 
 
+fticr_water_hcoc_summarized =
+  fticr_data_water_summarized %>% 
+  left_join(fticr_meta_water) %>% 
+  dplyr::select(formula, slopepos, cover_type, plot, HC, OC) %>% 
+  mutate(cover_type = recode(cover_type, "Canopy" = "closed"),
+         cover_type = recode(cover_type, "Open" = "open")) %>% 
+  group_by(cover_type, slopepos) %>% 
+  dplyr::mutate(n= n()) %>% 
+  group_by(cover_type, slopepos) %>% 
+  dplyr::summarise(n = n())
 
 
 # 

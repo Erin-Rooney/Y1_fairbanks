@@ -27,7 +27,8 @@ cn_data_processed =
                                       grepl("o", canopy_slope)~"open",
                                       grepl("CC", canopy_slope)~"canopy",
                                       grepl("C", canopy_slope)~"canopy")) %>% 
-  select(-c(canopy_slope))
+  select(-c(canopy_slope)) %>% 
+  mutate(cnratio = c_perc/n_perc)
 
 metadata2 = 
   metadata %>% 
@@ -84,3 +85,11 @@ summary.aov(n_aov)
 n_hsd = HSD.test(n_aov, "slopepos")
 print(n_hsd)
 
+cn_aov <- aov(cnratio ~ covertype*slopepos, data = cn_data_processed)
+summary.aov(cn_aov)
+
+cn_hsd = HSD.test(cn_aov, "slopepos")
+print(cn_hsd)
+
+cn_hsd2 = HSD.test(cn_aov, "covertype")
+print(cn_hsd2)
