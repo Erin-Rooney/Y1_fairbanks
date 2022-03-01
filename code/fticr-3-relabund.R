@@ -136,7 +136,7 @@ fit_aov_open = function(dat){
     # two steps below, we need to left-join. 
     # set Trtmt = "FTC" so the asterisks will be added to the FTC values only
     mutate(cover_type = "Open") %>% 
-    NULL
+    force()
   
 }
 
@@ -155,7 +155,7 @@ fit_hsd = function(dat){
 ## step 3: run the fit_anova function 
 ## do this on the original relabund file, because we need all the reps
 
-#covertype NOT WORKING
+#covertype now working
 
 relabund_aov_covertype = 
   fticr_water_relabund %>% 
@@ -164,7 +164,7 @@ relabund_aov_covertype =
   do(fit_aov_open(.))
 
 
-#slopepos great, this one just stopped working. what the fuck. 2 25 2022 8:10 pm
+#slopepos 
 
 relabund_hsd_slopepos = 
   fticr_water_relabund %>% 
@@ -180,8 +180,8 @@ relabund_hsd_slopepos =
 
 #Not working, issue with asterisk as a character, won't paste.
 relabund_table_with_aov_covertype = 
-  relabund_aov_covertype %>% 
-  left_join(relabund_hsd_covertype) %>%
+  relabund_table_covertype %>% 
+  left_join(relabund_aov_covertype) %>%
   # combine the values with the label notation
   mutate(value = paste(summary, asterisk),
          # this will also add " NA" for the blank cells
@@ -192,7 +192,13 @@ relabund_table_with_aov_covertype =
   pivot_wider(names_from = "slopepos", values_from = "value") %>% 
   force()
 
-# working again as of 2 28 2022 11:30 am
+
+relabund_table_with_aov_covertype %>% knitr::kable() # prints a somewhat clean table in the console
+
+write.csv(relabund_table_with_aov_covertype, "output/covertype_aovstats.csv", row.names = FALSE)
+
+
+# working
 
 relabund_table_with_hsd_slopepos = 
   relabund_table_covertype %>% 
