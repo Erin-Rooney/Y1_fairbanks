@@ -11,6 +11,44 @@ library(utils)
 
 # 
 
+# importing XRD data ------------------------------------------------------
+# set the path where the files are being stored
+# then run the import function. 
+
+
+XY_PATH = "processed"
+
+import_xy_data = function(XY_PATH){
+  # first, pull all the file names with the target pattern (".xy")
+  filePaths <- list.files(path = XY_PATH,pattern = "*.xy", full.names = TRUE)
+  
+  # then, run this function to combine (rbind) all the imported dataframes
+  xy_dat <- do.call(rbind, lapply(filePaths, function(path) {
+
+    # read the .xy files, they come in as lists. convert to dataframe
+    data <- read_xyData(path)
+    data_df <- data.frame(data[["dataset"]][[1]][["data_block"]])
+    
+    # then add a new column `source` to denote the file name
+    data_df[["source"]] <- rep(path, nrow(data_df))
+    data_df}))
+  
+}
+
+xydata = import_xy_data(XY_PATH)
+## ^^ clean up the source column using str_remove() and separate()
+## and then left_join() the sample key
+
+## make diffractograms
+xydata %>% 
+  ggplot(aes(x = V1, y = V2, color = source))+
+  geom_line()
+
+
+#
+# -------------------------------------------------------------------------
+
+
 #trying to bring all of the .xy ASCII files in
 dataFiles <- lapply(Sys.glob("processed/*.xy"), read_xyData)
 
