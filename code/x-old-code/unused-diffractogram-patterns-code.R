@@ -1,5 +1,29 @@
 #Unused Xrd diffractogram patterns
 
+
+
+#trying to bring all of the .xy ASCII files in
+dataFiles <- lapply(Sys.glob("processed/*.xy"), read_xyData)
+
+#now bringing them in as not Rxylib files, which are impossible to deal with
+dataFiles2 <- lapply(Sys.glob("processed/*.xy"), read.delim)
+
+#now trying to bring them in with names but only six are loading. Why? WHy???
+#also, two columns are loading as one. Need to by separated by " "
+filenames <- head(list.files("processed/", pattern = "*.xy", recursive = TRUE, full.names = TRUE))
+filenames
+tools::file_path_sans_ext(basename(filenames))
+
+dataFiles2b <- setNames(lapply(filenames, readLines), 
+                        tools::file_path_sans_ext(basename(filenames)))
+
+
+#now all loaded, not rxylib, no names, two columns lumped into one column
+list_data <- Map(as.data.frame, dataFiles2)
+
+#don't know why I did this. Just trying things.
+write.csv(list_data, "processed/list_data.csv")
+
 #dataFiles2 <- lapply(Sys.glob("processed/*.xy"), convert_xy2TKA)
 
 # 

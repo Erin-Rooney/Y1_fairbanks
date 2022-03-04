@@ -15,6 +15,8 @@ library(utils)
 # set the path where the files are being stored
 # then run the import function. 
 
+y1metadata = read.csv("processed/y1_metadata.csv") %>% 
+  mutate(ID = str_remove(ID, "Y1 "))  
 
 XY_PATH = "processed"
 
@@ -35,57 +37,121 @@ import_xy_data = function(XY_PATH){
   
 }
 
-xydata = import_xy_data(XY_PATH)
+xydata = import_xy_data(XY_PATH) %>% 
+  mutate(source = str_remove(source, "processed/Y1"),
+         source = str_remove(source, ".xy"))  
+
+xydata_cleaned = 
+  xydata %>% 
+  separate(source, sep = " ", into = c("ID", "sample")) %>% 
+  left_join(y1metadata, by = 'ID') %>% 
+  mutate(cover_type = recode(cover_type, "Canopy" = "Closed")) %>% 
+  mutate(sample_rep = paste(rep, " ", top_cm, "-", bottom_cm)) %>% 
+  na.omit() 
+  
+  
 ## ^^ clean up the source column using str_remove() and separate()
 ## and then left_join() the sample key
 
 ## make diffractograms
-xydata %>% 
-  ggplot(aes(x = V1, y = V2, color = source))+
-  geom_line()
+open_backslope = 
+  xydata_cleaned %>%
+  filter(slopepos == "backslope" & cover_type == "Open") %>% 
+  ggplot(aes(x = V1, y = V2, color = sample_rep))+
+  geom_line()+
+  facet_grid(slopepos ~ cover_type)+
+  labs(y = 'intensity (counts)',
+       x = "Position, °2Theta",
+       color="replicate and depth, cm")+
+  theme_er()
+
+closed_backslope = 
+  xydata_cleaned %>%
+  filter(slopepos == "backslope" & cover_type == "Closed") %>% 
+  ggplot(aes(x = V1, y = V2, color = sample_rep))+
+  geom_line()+
+  facet_grid(slopepos ~ cover_type)+
+  labs(y = 'intensity (counts)',
+       x = "Position, °2Theta",
+       color="replicate and depth, cm")+
+  theme_er()
+
+
+open_low_backslope = 
+  xydata_cleaned %>%
+  filter(slopepos == "low backslope" & cover_type == "Open") %>% 
+  ggplot(aes(x = V1, y = V2, color = sample_rep))+
+  geom_line()+
+  facet_grid(slopepos ~ cover_type)+
+  labs(y = 'intensity (counts)',
+       x = "Position, °2Theta",
+       color="replicate and depth, cm")+
+  theme_er()
+
+closed_low_backslope = 
+  xydata_cleaned %>%
+  filter(slopepos == "low backslope" & cover_type == "Closed") %>% 
+  ggplot(aes(x = V1, y = V2, color = sample_rep))+
+  geom_line()+
+  facet_grid(slopepos ~ cover_type)+
+  labs(y = 'intensity (counts)',
+       x = "Position, °2Theta",
+       color="replicate and depth, cm")+
+  theme_er()
+
+
+open_footslope = 
+  xydata_cleaned %>%
+  filter(slopepos == "footslope" & cover_type == "Open") %>% 
+  ggplot(aes(x = V1, y = V2, color = sample_rep))+
+  geom_line()+
+  facet_grid(slopepos ~ cover_type)+
+  labs(y = 'intensity (counts)',
+       x = "Position, °2Theta",
+       color="replicate and depth, cm")+
+  theme_er()
+
+closed_footslope = 
+  xydata_cleaned %>%
+  filter(slopepos == "footslope" & cover_type == "Closed") %>% 
+  ggplot(aes(x = V1, y = V2, color = sample_rep))+
+  geom_line()+
+  facet_grid(slopepos ~ cover_type)+
+  labs(y = 'intensity (counts)',
+       x = "Position, °2Theta",
+       color="replicate and depth, cm")+
+  theme_er()
+
+
+ggsave("output/xrdiffclosedback.tiff", plot = closed_backslope, height = 4.6, width = 7)
+ggsave("output/xrdiffclosedlowback.tiff", plot = closed_low_backslope, height = 4.6, width = 7)
+ggsave("output/xrdiffclosedfoot.tiff", plot = closed_footslope, height = 4.6, width = 7)
+ggsave("output/xrdiffopenback.tiff", plot = open_backslope, height = 4.6, width = 7)
+ggsave("output/xrdiffopenlowback.tiff", plot = open_low_backslope, height = 4.6, width = 7)
+ggsave("output/xrdiffopenfoot.tiff", plot = open_footslope, height = 4.6, width = 7)
+
+
 
 
 #
 # -------------------------------------------------------------------------
 
 
-#trying to bring all of the .xy ASCII files in
-dataFiles <- lapply(Sys.glob("processed/*.xy"), read_xyData)
-
-#now bringing them in as not Rxylib files, which are impossible to deal with
-dataFiles2 <- lapply(Sys.glob("processed/*.xy"), read.delim)
-
-#now trying to bring them in with names but only six are loading. Why? WHy???
-#also, two columns are loading as one. Need to by separated by " "
-filenames <- head(list.files("processed/", pattern = "*.xy", recursive = TRUE, full.names = TRUE))
-filenames
-tools::file_path_sans_ext(basename(filenames))
-
-dataFiles2b <- setNames(lapply(filenames, readLines), 
-                    tools::file_path_sans_ext(basename(filenames)))
-
-
-#now all loaded, not rxylib, no names, two columns lumped into one column
-list_data <- Map(as.data.frame, dataFiles2)
-
-#don't know why I did this. Just trying things.
-write.csv(list_data, "processed/list_data.csv")
-
 ##start here in re-runs of this code-------------------------
 
 
-library(powdR)
-
-#healysoils = 
-  plot(dataFiles, wavelength = "Cu",
-       xlim = c(0,100),
-       normalise = FALSE)+
-  geom_text(data = gglabel2, aes(x = x, y = y, label = label), color = "black", size = 3.5, angle = 90)+
-  labs(y = 'intensity (counts)',
-       x = "Position, °2Theta",
-       color="replicate and depth, cm")+
-  # scale_color_manual(values = c("#fd474d","#fdb678","#fcff9f","#91f698","#51fff9",
-  #                               "#4f52ef","#9c4bf8","#db4ffa"
-  # 
-  # ))+
-  theme_er()
+# library(powdR)
+# 
+# #healysoils = 
+#   plot(dataFiles, wavelength = "Cu",
+#        xlim = c(0,100),
+#        normalise = FALSE)+
+#   geom_text(data = gglabel2, aes(x = x, y = y, label = label), color = "black", size = 3.5, angle = 90)+
+#   labs(y = 'intensity (counts)',
+#        x = "Position, °2Theta",
+#        color="replicate and depth, cm")+
+#   # scale_color_manual(values = c("#fd474d","#fdb678","#fcff9f","#91f698","#51fff9",
+#   #                               "#4f52ef","#9c4bf8","#db4ffa"
+#   # 
+#   # ))+
+#   theme_er()
