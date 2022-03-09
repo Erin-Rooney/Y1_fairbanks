@@ -190,10 +190,16 @@ relabund_table_with_aov_covertype =
   ) %>% 
   dplyr::select(-summary, -asterisk) %>% 
   pivot_wider(names_from = "slopepos", values_from = "value") %>% 
-  force()
+  force() %>% 
+  rename("low_backslope" = "low backslope") %>% 
+  mutate(backslope = str_remove(backslope, " NA")) %>% 
+  mutate(low_backslope = str_remove(low_backslope, " NA")) %>% 
+  mutate(footslope = str_remove(footslope, " NA"))  
+  
 
 
 relabund_table_with_aov_covertype %>% knitr::kable() # prints a somewhat clean table in the console
+
 
 write.csv(relabund_table_with_aov_covertype, "output/covertype_aovstats.csv", row.names = FALSE)
 
