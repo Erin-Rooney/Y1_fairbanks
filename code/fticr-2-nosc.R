@@ -179,6 +179,35 @@ aov_nosc_class = aov(NOSC ~ Class*slopepos*cover_type, data = fticr_water_slopep
 summary(aov_nosc_class)
 print(aov_nosc_class)
 
+
+#slope positions
+
+BACK = aov(NOSC ~ cover_type, data = fticr_water_slopepos_unique %>% 
+                  filter(slopepos == 'backslope'))
+summary(BACK)
+print(BACK)
+anova(BACK)
+nosc_BACK_hsd <- HSD.test(BACK, "cover_type")
+print(nosc_BACK_hsd)
+
+LOWBACK = aov(NOSC ~ cover_type, data = fticr_water_slopepos_unique %>% 
+             filter(slopepos == 'low backslope'))
+summary(LOWBACK)
+print(LOWBACK)
+anova(LOWBACK)
+nosc_LOWBACK_hsd <- HSD.test(LOWBACK, "cover_type")
+print(nosc_LOWBACK_hsd)
+
+
+FOOT = aov(NOSC ~ cover_type, data = fticr_water_slopepos_unique %>% 
+                filter(slopepos == 'footslope'))
+summary(FOOT)
+print(FOOT)
+anova(FOOT)
+nosc_FOOT_hsd <- HSD.test(FOOT, "cover_type")
+print(nosc_FOOT_hsd)
+
+
 ###backslope
 
 BACKaliph = aov(NOSC ~ cover_type, data = fticr_water_slopepos_unique %>% 
