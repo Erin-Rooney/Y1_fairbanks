@@ -172,6 +172,42 @@ relabund_hsd_slopepos =
   group_by(cover_type, Class) %>% 
   do(fit_hsd(.))
 
+###quick aov and tukey for slope position only
+
+
+
+slope_lig = aov(relabund ~ slopepos, data = fticr_water_relabund %>% 
+             filter(Class == 'unsaturated/lignin'))
+summary(slope_lig)
+print(slope_lig)
+anova(slope_lig)
+slope_lig_hsd <- HSD.test(slope_lig, "slopepos")
+print(slope_lig_hsd)
+
+slope_aliph = aov(relabund ~ slopepos, data = fticr_water_relabund %>% 
+                  filter(Class == 'aliphatic'))
+summary(slope_aliph)
+print(slope_aliph)
+anova(slope_aliph)
+slope_aliph_hsd <- HSD.test(slope_aliph, "slopepos")
+print(slope_aliph_hsd)
+
+
+slope_aro = aov(relabund ~ slopepos, data = fticr_water_relabund %>% 
+                    filter(Class == 'aromatic'))
+summary(slope_aro)
+print(slope_aro)
+anova(slope_aro)
+slope_aro_hsd <- HSD.test(slope_aro, "slopepos")
+print(slope_aro_hsd)
+
+slope_caro = aov(relabund ~ slopepos, data = fticr_water_relabund %>% 
+                  filter(Class == 'condensed aromatic'))
+summary(slope_caro)
+print(slope_caro)
+anova(slope_caro)
+slope_caro_hsd <- HSD.test(slope_caro, "slopepos")
+print(slope_caro_hsd)
 
 #################
 

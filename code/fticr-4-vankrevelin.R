@@ -48,12 +48,14 @@ fticr_water_hcoc_summarized =
 # 
 
 gglabel2 = tribble(
- ~x, ~y, ~label,
- 0.2, 1.75, "aliphatic",
- 0.2, 1.25, "lignin-like",
- 0.2, 0.85, "aromatic",
- 0.3, 0.35, "condensed aromatic",
-)
+ ~x, ~y, ~label, ~slopepos,
+ 1.0, 2.25, "aliphatic", "footslope",
+ 1.0, 1.25, "lignin-like", "footslope",
+ 0.2, 0.85, "aromatic", "footslope",
+ 0.4, 0.35, "condensed aromatic", 'footslope',
+) %>% 
+  mutate(slopepos = factor (slopepos, levels = c("backslope", "low backslope", "footslope")))
+
 
 
 # method figure ------------------------------
@@ -153,6 +155,7 @@ uniquepeaks_vankrev =
   geom_segment(x = 0.0, y = 1.5, xend = 1.2, yend = 1.5,color="black",linetype="longdash") +
   geom_segment(x = 0.0, y = 0.7, xend = 1.2, yend = 0.4,color="black",linetype="longdash") +
   geom_segment(x = 0.0, y = 1.06, xend = 1.2, yend = 0.51,color="black",linetype="longdash") +
+  geom_text(data = gglabel2, aes(x = x, y = y, label = label), color = "black", size = 3.5)+
   guides(colour = guide_legend(override.aes = list(alpha=1, size=2)))+
   labs(x = "O/C",
        y = "H/C")+
