@@ -6,20 +6,10 @@
 #load packages
 source("code/FTICR-0-packages.R")
 
-library(dplyr)
-library(purrr)
-library(tidyr)
-library(ggplot2)
-library(reshape)
-library(reshape2)
-library(plyr)
-library(Rmisc)
-library(devtools)
-#install_github("BajczA475/FTCQuant/FTCQuant")
-library(FTCQuant)
-library(data.table)
-library(neonUtilities)
-library(scales)
+library(lubridate)
+
+#change source file 0.75 cm to 75 cm & 0.05 cm to 5 cm
+
 
 # 1. Load files-----------------------------------
 
@@ -29,44 +19,59 @@ fairbanks_ftc = read.csv("rawdata/fairbanks_open_vs_tree.csv")
 
 fairbanks_ftc_open = 
   fairbanks_ftc %>% 
-  select(open_date_time, open_tempC_0.05cm, open_tempC_0.75cm) %>% 
-  dplyr::mutate(cover_type = 'open') %>% 
-  rename(date_time = open_date_time) %>% 
-  rename(tempC_0.05 = open_tempC_0.05cm) %>% 
-  rename(tempC_0.75 = open_tempC_0.75cm)
+  select(starts_with('open')) %>% 
+  dplyr::rename(date_time = open_date_time) %>% 
+  dplyr::rename(tempC_5 = open_tempC_5cm) %>% 
+  dplyr::rename(tempC_75 = open_tempC_75cm) %>% 
+  pivot_longer(-c(date_time), names_to = "depth", values_to = "temperature_C") %>% 
+  mutate(depth = str_remove(depth, "tempC_")) %>% 
+  dplyr::mutate(cover_type = 'open')   
+  
 
 fairbanks_ftc_closed = 
   fairbanks_ftc %>% 
-  select(closed_date_time, closed_tempC_0.05cm, closed_tempC_0.75cm) %>% 
-  dplyr::mutate(cover_type = 'closed') %>% 
+  select(starts_with('closed')) %>% 
   rename(date_time = closed_date_time) %>% 
-  rename(tempC_0.05 = closed_tempC_0.05cm) %>% 
-  rename(tempC_0.75 = closed_tempC_0.75cm)
+  rename(tempC_5 = closed_tempC_5cm) %>% 
+  rename(tempC_75 = closed_tempC_75cm) %>% 
+  pivot_longer(-c(date_time), names_to = "depth", values_to = "temperature_C") %>% 
+  mutate(depth = str_remove(depth, "tempC_")) %>% 
+  dplyr::mutate(cover_type = 'closed') 
+  
 
 fairbanks_ftc_combined = 
   fairbanks_ftc_open %>% 
-  bind_rows(fairbanks_ftc_closed) %>% 
+  bind_rows(fairbanks_ftc_closed) %>%
   na.omit() %>% 
-  separate(date_time, sep = " ", into = c("date", "time")) 
+  mutate(date_time = mdy_hm(date_time)) %>% 
+  pivot_wider(names_from = 'cover_type', values_from = "temperature_C") %>% 
+  pivot_longer(-c(date_time, depth), names_to = 'cover_type', values_to = 'temperature_C')
 
   #fairbanks_ftc_combined$date <- as.Date(fairbanks_ftc_combined$date)
 
-fairbanks_ftc_combined %>% 
-  ggplot(aes(x = as.Date(date_time), y = tempC_0.75))+
-  geom_line(group = "cover_type")+
-  facet_grid(cover_type ~.)
+library(scales)
 
 
-  geom_segment(x = 0.0, y = 0.0, xend = '9/9/2021 18:00', yend = 0.0,
-               color = "red", linetype = "longdash")+
-  theme(axis.text.x = element_text (vjust = 0.5, hjust=1, angle = 90))
+fairbanks_temperature = 
+  fairbanks_ftc_combined %>% 
+  ggplot(aes(x = date_time, y = temperature_C, color = cover_type))+
+  geom_line()+
+  labs(x = "", 
+       y = "temperature, celsius")+
+  geom_hline(yintercept = 0, color = "black", linetype = "longdash")+
+  scale_x_datetime( breaks=("3 months"), 
+                    labels=date_format("%b-%y"), 
+                    timezone = "UTC-9:00") + 
+  #scale_color_manual(values = PNWColors::pnw_palette("Bay", 2))+
+  scale_color_manual(values = c('#006d77', '#e29578'))+
+  facet_grid(depth ~., scales = "free_y", 
+             labeller = as_labeller(c('5' = "5 cm", '75' = "75 cm"))) +
+  theme_er()+
+  theme(axis.text.x = element_text (vjust = 0.5, angle = 45))
+  
+ggsave("output/fairbanks_temperature.tiff", plot = fairbanks_temperature, height = 6.6, width = 10)
 
 
-
-# scale_x_datetime( breaks=("1 month"), 
-#                   minor_breaks=("14 days"), 
-#                   labels=date_format("%m/%y"), 
-#                   timezone = "UTC-9:00") + 
 
 
 

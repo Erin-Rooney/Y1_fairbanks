@@ -1,4 +1,4 @@
-date_time,open_tempC_0.05cm,open_tempC_0.75cm,date/time,closed_tempC_0.05cm,closed_tempC_0.75cm
+open_date_time,open_tempC_5cm,open_tempC_75cm,closed_date_time,closed_tempC_5cm,closed_tempC_75cm
 10/3/2017 0:00,2.61,-0.06,10/3/2017 18:00,6.712,-0.032
 10/3/2017 6:00,2.262,-0.06,10/4/2017 0:00,1.344,-0.06
 10/3/2017 12:00,4.272,-0.06,10/4/2017 6:00,3.036,-0.06
