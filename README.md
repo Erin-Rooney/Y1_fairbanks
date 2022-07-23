@@ -3,5 +3,5 @@
 Erin C. Rooney, Vanessa L. Bailey, Kaizad F. Patel, Alexander Kholodov, Holly Golightly, Rebecca A. Lybrand
 
 In prep for submission April, 2022. 
- 
-![Y1_sitepicture](https://user-images.githubusercontent.com/61806923/149851610-14a90922-c990-4403-a04d-e8dbf171cb4b.png)
+
+![Y1_sitepicture](https://user-images.githubusercontent.com/61806923/180624572-ec0a8327-a769-4e67-8c19-7c2749fc18ce.png)
