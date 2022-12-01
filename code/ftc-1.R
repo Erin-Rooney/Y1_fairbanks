@@ -67,11 +67,132 @@ fairbanks_temperature =
   facet_grid(depth ~., scales = "free_y", 
              labeller = as_labeller(c('5' = "5 cm", '75' = "75 cm"))) +
   theme_er()+
-  theme(axis.text.x = element_text (vjust = 0.5, angle = 45))
+  theme(axis.text.x = element_text (angle = 90, size = 10))
   
 ggsave("output/fairbanks_temperature.tiff", plot = fairbanks_temperature, height = 6.6, width = 10)
 
 
+###FTC time
+
+library(purrr)
+library(reshape)
+library(reshape2)
+library(plyr)
+library(Rmisc)
+library(devtools)
+library(FTCQuant)
+library(data.table)
+library(scales)
+
+
+#convert to factors
+
+
+#open 5
+
+for_ftc_dat_open_5 =
+  fairbanks_ftc_combined %>% 
+  dplyr::rename("date" = "date_time") %>%
+  separate(date, sep = " ", into = c("date1", "time")) %>%
+  mutate(date = as.Date(paste(date1,time, sep = "-"))) %>% 
+  filter(cover_type == "open" & depth == "5") %>% 
+  na.omit() %>% 
+  dplyr::select(c(date, temperature_C)) %>% 
+  dplyr::rename("temp" = "temperature_C") 
+
+column_names_open5=as.vector(colnames(for_ftc_dat_open_5[,2:ncol(for_ftc_dat_open_5)]))
+column_number_open5=as.vector(2:ncol(for_ftc_dat_open_5))
+#This function makes a list of elements, extracting row 1 (date) and then sequentially each column (y)
+#Each date and data column is a new element in the list, named by the list of column names above (x) 
+funopen5 <- function(name,number) {
+  data.list_open5 <- list(name = for_ftc_dat_open_5[,c(1,number)])
+}
+#This applies the function to loop through the list of column names (name) and numbers (number) 
+data.list_open5 = mapply(funopen5,column_names_open5,column_number_open5)
+FTC_open_5 =freeze.thaw.analysis(data.list_open5, mag.vec=0, dur.vec=1, thres.vec=0)
+
+FTC_dat_open_5 = cbind(FTC_open_5$data, column_names_open5)
+
+
+#open 75
+
+for_ftc_dat_open_75 =
+  fairbanks_ftc_combined %>% 
+  dplyr::rename("date" = "date_time") %>%
+  separate(date, sep = " ", into = c("date1", "time")) %>%
+  mutate(date = as.Date(paste(date1,time, sep = "-"))) %>% 
+  filter(cover_type == "open" & depth == "75") %>% 
+  na.omit() %>% 
+  dplyr::select(c(date, temperature_C)) %>% 
+  dplyr::rename("temp" = "temperature_C") 
+
+column_names_open75=as.vector(colnames(for_ftc_dat_open_75[,2:ncol(for_ftc_dat_open_75)]))
+column_number_open75=as.vector(2:ncol(for_ftc_dat_open_75))
+#This function makes a list of elements, extracting row 1 (date) and then sequentially each column (y)
+#Each date and data column is a new element in the list, named by the list of column names above (x) 
+funopen75 <- function(name,number) {
+  data.list_open75 <- list(name = for_ftc_dat_open_75[,c(1,number)])
+}
+#This applies the function to loop through the list of column names (name) and numbers (number) 
+data.list_open75 = mapply(funopen75,column_names_open75,column_number_open75)
+FTC_open75 =freeze.thaw.analysis(data.list_open75, mag.vec=0, dur.vec=1, thres.vec=0)
+
+FTC_dat_open75 = cbind(FTC_open75$data, column_names_open75)
+
+
+
+#closed 5
+
+
+for_ftc_dat_closed_5 =
+  fairbanks_ftc_combined %>% 
+  dplyr::rename("date" = "date_time") %>%
+  separate(date, sep = " ", into = c("date1", "time")) %>%
+  mutate(date = as.Date(paste(date1,time, sep = "-"))) %>% 
+  filter(cover_type == "closed" & depth == "5") %>% 
+  na.omit() %>% 
+  dplyr::select(c(date, temperature_C)) %>% 
+  dplyr::rename("temp" = "temperature_C") 
+
+column_names_closed5=as.vector(colnames(for_ftc_dat_closed_5[,2:ncol(for_ftc_dat_closed_5)]))
+column_number_closed5=as.vector(2:ncol(for_ftc_dat_closed_5))
+#This function makes a list of elements, extracting row 1 (date) and then sequentially each column (y)
+#Each date and data column is a new element in the list, named by the list of column names above (x) 
+funclosed5 <- function(name,number) {
+  data.list_closed5 <- list(name = for_ftc_dat_closed_5[,c(1,number)])
+}
+#This applies the function to loop through the list of column names (name) and numbers (number) 
+data.list_closed5 = mapply(funclosed5,column_names_closed5,column_number_closed5)
+FTC_closed_5 =freeze.thaw.analysis(data.list_closed5, mag.vec=0, dur.vec=1, thres.vec=0)
+
+FTC_dat_closed_5 = cbind(FTC_closed_5$data, column_names_closed5)
+
+
+#closed 75
+
+
+for_ftc_dat_closed_75 =
+  fairbanks_ftc_combined %>% 
+  dplyr::rename("date" = "date_time") %>%
+  separate(date, sep = " ", into = c("date1", "time")) %>%
+  mutate(date = as.Date(paste(date1,time, sep = "-"))) %>% 
+  filter(cover_type == "closed" & depth == "75") %>% 
+  na.omit() %>% 
+  dplyr::select(c(date, temperature_C)) %>% 
+  dplyr::rename("temp" = "temperature_C") 
+
+column_names_closed75=as.vector(colnames(for_ftc_dat_closed_75[,2:ncol(for_ftc_dat_closed_75)]))
+column_number_closed75=as.vector(2:ncol(for_ftc_dat_closed_75))
+#This function makes a list of elements, extracting row 1 (date) and then sequentially each column (y)
+#Each date and data column is a new element in the list, named by the list of column names above (x) 
+funclosed75 <- function(name,number) {
+  data.list_closed75 <- list(name = for_ftc_dat_closed_75[,c(1,number)])
+}
+#This applies the function to loop through the list of column names (name) and numbers (number) 
+data.list_closed75 = mapply(funclosed75,column_names_closed75,column_number_closed75)
+FTC_closed_75 =freeze.thaw.analysis(data.list_closed75, mag.vec=0, dur.vec=1, thres.vec=0)
+
+FTC_dat_closed_75 = cbind(FTC_closed_75$data, column_names_closed75)
 
 
 
