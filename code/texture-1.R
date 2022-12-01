@@ -40,5 +40,4 @@ texture_long %>% knitr::kable() # prints a somewhat clean table in the console
 write.csv(texture_long, "output/texture_long.csv", row.names = FALSE)
 
 
-#stats
 

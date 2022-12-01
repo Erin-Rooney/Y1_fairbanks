@@ -29,29 +29,29 @@ write.csv(om_data_processed, "output/om_data_processed.csv", row.names = FALSE)
 
 # 4. Figures
 
-# tree_data_table =
-#   soil_data %>% 
-#   group_by(slopepos, cover_type) %>%
-#   dplyr::summarize(DBH_mean = round(mean(DBH..cm.), 3),
-#                    DBH_se = round(sd(DBH..cm.)/sqrt(n()),3)) %>% 
-#   na.omit()
-# 
-# 
-# dbh = tree_data_table %>% 
-#   mutate(slopepos = factor(slopepos, levels = c("Backslope", "Low Backslope", "Footslope"))) %>%
-#   ggplot(aes(x = slopepos, y = DBH_mean))+
-#   geom_bar(stat = "identity", position = position_dodge())+
-#   geom_errorbar(aes(ymin=(DBH_mean-DBH_se/2),ymax=(DBH_mean+DBH_se/2)),width=.2,position=position_dodge(.9))+
-#   labs(y = "DBH, cm",
-#        x = "")+
-#   theme_er()+
-#   theme(legend.position = "bottom", panel.border = element_rect(color="white",size=0.5, fill = NA), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)
-#   )+
-#   #facet_grid(.~slopepos)+
-#   NULL
-# 
-# ggsave("output/dbh.tiff", plot = dbh, height = 5, width = 4)
-# ggsave("output/dbh.jpeg", plot = dbh, height = 5, width = 4)
+tree_data_table =
+  soil_data %>%
+  group_by(slopepos, cover_type) %>%
+  dplyr::summarize(DBH_mean = round(mean(DBH..cm.), 3),
+                   DBH_se = round(sd(DBH..cm.)/sqrt(n()),3)) %>%
+  na.omit()
+
+
+dbh = tree_data_table %>%
+  mutate(slopepos = factor(slopepos, levels = c("Backslope", "Low Backslope", "Footslope"))) %>%
+  ggplot(aes(x = slopepos, y = DBH_mean))+
+  geom_bar(stat = "identity", position = position_dodge())+
+  geom_errorbar(aes(ymin=(DBH_mean-DBH_se/2),ymax=(DBH_mean+DBH_se/2)),width=.2,position=position_dodge(.9))+
+  labs(y = "DBH, cm",
+       x = "")+
+  theme_er()+
+  theme(legend.position = "bottom", panel.border = element_rect(color="white",size=0.5, fill = NA), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)
+  )+
+  #facet_grid(.~slopepos)+
+  NULL
+
+ggsave("output/dbh.tiff", plot = dbh, height = 5, width = 4)
+ggsave("output/dbh.jpeg", plot = dbh, height = 5, width = 4)
 
 
 
@@ -107,3 +107,11 @@ summary.aov(grav_aov)
 
 grav_slopepos_hsd = HSD.test(grav_aov, "slopepos")
 print(grav_slopepos_hsd)
+
+#
+
+dbh_stats <- aov(DBH..cm. ~ slopepos, data = soil_data)
+summary.aov(dbh_stats)
+
+dbh_hsd = HSD.test(dbh_stats, "slopepos")
+print(dbh_hsd)
