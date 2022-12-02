@@ -45,7 +45,8 @@ fairbanks_ftc_combined =
   na.omit() %>% 
   mutate(date_time = mdy_hm(date_time)) %>% 
   pivot_wider(names_from = 'cover_type', values_from = "temperature_C") %>% 
-  pivot_longer(-c(date_time, depth), names_to = 'cover_type', values_to = 'temperature_C')
+  pivot_longer(-c(date_time, depth), names_to = 'cover_type', values_to = 'temperature_C') %>% 
+  filter(date_time > "2020-06-01 00:00:00")
 
   #fairbanks_ftc_combined$date <- as.Date(fairbanks_ftc_combined$date)
 
@@ -55,11 +56,11 @@ library(scales)
 fairbanks_temperature = 
   fairbanks_ftc_combined %>% 
   ggplot(aes(x = date_time, y = temperature_C, color = cover_type))+
-  geom_line()+
+  geom_line(size = 0.625)+
   labs(x = "", 
        y = "temperature, celsius")+
   geom_hline(yintercept = 0, color = "black", linetype = "longdash")+
-  scale_x_datetime( breaks=("3 months"), 
+  scale_x_datetime( breaks=("1 month"), 
                     labels=date_format("%b-%y"), 
                     timezone = "UTC-9:00") + 
   #scale_color_manual(values = PNWColors::pnw_palette("Bay", 2))+

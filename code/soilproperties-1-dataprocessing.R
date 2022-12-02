@@ -16,7 +16,10 @@ om_data_processed =
   om_data %>% 
   group_by(slopepos, cover_type) %>%
   dplyr::summarize(om_mean = round(mean(depth), 1),
-                   om_se = round(sd(depth)/sqrt(n()),1)
+                   om_se = round(sd(depth)/sqrt(n()),1),
+                   om_min = round(min(depth),1),
+                   om_max = round(max(depth),1),
+                   om_max_min = ((om_max+om_min)/2))
                   ) %>% 
   mutate(om_summary = paste(om_mean, "\u00b1", om_se)) %>% 
   select(-c(om_mean, om_se))
