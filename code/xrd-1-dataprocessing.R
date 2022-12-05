@@ -129,7 +129,7 @@ xrd_stats =
   #           chlorite_stdev, mica_stdev, hornblende_stdev, ankerite_stdev)) %>% 
   pivot_longer(cols = c(quartz, albite, anorthite, microcline, chlorite, mica, hornblende,
                         ankerite), names_to = "mineral", values_to = "abundance") %>% 
-  group_by(slopepos, covertype, mineral) %>% 
+  group_by(slopepos, covertype, morph, mineral) %>% 
   dplyr::summarize(mean = round(mean(abundance), 3),
                    se = round(sd(abundance)/sqrt(n()),3)) %>% 
   mutate(value = paste(mean, "\u00b1", se)
@@ -137,7 +137,7 @@ xrd_stats =
          # use str_remove to remove the string
          #value = str_remove(value, " NA")
   ) %>% 
-  dplyr::select(-mean, -se) %>% 
+  #dplyr::select(-mean, -se) %>% 
   na.omit() %>% 
   mutate(covertype = recode(covertype, "canopy" = "closed"))
 
@@ -151,19 +151,19 @@ xrd_slope =
   mutate(slopepos = recode(slopepos, "low_backslope" = 'low backslope')) %>% 
   mutate(slopepos = factor(slopepos, levels = c("backslope", "low backslope", "footslope"))) 
 
-xrd_slope %>% 
-  ggplot(aes(x = mineral, y = mean, fill = covertype))+
-  geom_bar(stat = "identity", position = position_dodge())+
-  geom_errorbar(aes(ymin=(mean-se/2),ymax=(mean+se/2)),width=.2,position=position_dodge(.9))+
-  coord_flip() +
-  labs(y = "abundance",
-       x = "")+
-  scale_fill_manual(values = (PNWColors::pnw_palette("Shuksan", 3)))+
-    theme_er()+
-    theme(legend.position = "bottom", panel.border = element_rect(color="white",size=0.5, fill = NA)
-    )+
-    facet_grid(.~slopepos)+
-    NULL
+# xrd_slope %>% 
+#   ggplot(aes(x = mineral, y = mean, fill = covertype))+
+#   geom_bar(stat = "identity", position = position_dodge())+
+#   geom_errorbar(aes(ymin=(mean-se/2),ymax=(mean+se/2)),width=.2,position=position_dodge(.9))+
+#   coord_flip() +
+#   labs(y = "abundance",
+#        x = "")+
+#   scale_fill_manual(values = (PNWColors::pnw_palette("Shuksan", 3)))+
+#     theme_er()+
+#     theme(legend.position = "bottom", panel.border = element_rect(color="white",size=0.5, fill = NA)
+#     )+
+#     facet_grid(.~slopepos)+
+#     NULL
 
 
 xrd_cover =
@@ -181,6 +181,25 @@ xrd_cover =
   theme(legend.position = "bottom", panel.border = element_rect(color="white",size=0.5, fill = NA)
   )+
   facet_grid(.~covertype)+
+  NULL
+
+xrd_depth_ankerite =
+  xrd_stats %>% 
+  filter(mineral == "ankerite") %>% 
+  mutate(slopepos = recode(slopepos, "low_backslope" = 'low backslope')) %>% 
+  mutate(slopepos = factor(slopepos, levels = c("footslope", "low backslope", "backslope"))) %>%
+  mutate(morph = factor(morph, levels = c("Bg3", "Bg2", "Bg1"))) %>%
+  ggplot(aes(x = slopepos, y = mean, fill = morph))+
+  geom_bar(stat = "identity", position = position_dodge2(preserve = "single"))+
+  geom_errorbar(aes(ymin=(mean-se/2),ymax=(mean+se/2)),position=position_dodge2(preserve = "single", .5))+
+  coord_flip() +
+  labs(y = "abundance, %",
+       x = "")+
+  scale_fill_manual(values = rev(PNWColors::pnw_palette("Lake")))+
+  theme_er()+
+  theme(legend.position = "bottom", panel.border = element_rect(color="white",size=0.5, fill = NA))+
+  guides(fill= guide_legend(reverse = TRUE))+
+  facet_grid(mineral~covertype, scales = 'free_y')+
   NULL
 
 ggsave("output/xrd_cover.tiff", plot = xrd_cover, height = 6, width = 10)
