@@ -12,8 +12,8 @@ library(soilDB)
 
 #load csv
 #pedon_load <- read.csv("processed/metadata_Y1_munsell.csv", stringsAsFactors=FALSE)
-pedon <- read.csv("processed/metadata_Y1_munsell_noO.csv", stringsAsFactors=FALSE)
-pedon_load <- read.csv("processed/metadata_Y1_munsell_noO.csv", stringsAsFactors=FALSE)
+pedon <- read.csv("processed/metadata_Y1_munsell_noO_fixedhorizonation.csv", stringsAsFactors=FALSE)
+pedon_load <- read.csv("processed/metadata_Y1_munsell_noO_fixedhorizonation.csv", stringsAsFactors=FALSE)
 
 pedon2 = 
   pedon_load %>%   

@@ -1,0 +1,74 @@
+horizon,id,slopepos,cover_type,top,bottom,hue,value,chroma,fe,elev
+Oi,Y1-1-O-A,footslope,open,0,32,5.0 R,10,0,,159
+Oe,Y1-1-O-A,footslope,open,32,42,5.0 R,10,0,,159
+Bw1,Y1-1-O-A,footslope,open,42,48,2.5Y,3,3,present,159
+Bw2,Y1-1-O-A,footslope,open,48,54,2.5Y,3,3,,159
+Bw3,Y1-1-O-A,footslope,open,54,58,2.5Y,3,3,NC,159
+Oi,Y1-1-O-B,footslope,open,0,25,5.0 R,10,0,,159
+Oe,Y1-1-O-B,footslope,open,25,33,5.0 R,10,0,,159
+Oe/Bw,Y1-1-O-B,footslope,open,33,35,10YR,2,2,,159
+Bw1,Y1-1-O-B,footslope,open,35,39,2.5Y,3,3,,159
+Bw2,Y1-1-O-B,footslope,open,39,44,2.5Y,3,2,,159
+Oi,Y1-1-O-C,footslope,open,0,25,5.0 R,10,0,,159
+Oe,Y1-1-O-C,footslope,open,25,33,5.0 R,10,0,,159
+Bw1,Y1-1-O-C,footslope,open,33,45,2.5Y,3,2,present,159
+Bw2,Y1-1-O-C,footslope,open,45,50,2.5Y,3,3,,159
+Bw3,Y1-1-O-C,footslope,open,50,54,2.5Y,3,2,present,159
+Oi,Y1-1-C-A,footslope,canopy,0,23,5.0 R,10,0,,159
+Oe,Y1-1-C-A,footslope,canopy,23,29,5.0 R,10,0,,159
+Bw1,Y1-1-C-A,footslope,canopy,29,38,2.5Y,3,2,,159
+Bw2,Y1-1-C-A,footslope,canopy,38,43,2.5Y,3,2,,159
+Bw3,Y1-1-C-A,footslope,canopy,43,48,2.5Y,5,3,,159
+Oi,Y1-1-C-B,footslope,canopy,0,20,5.0 R,10,0,,159
+Oe,Y1-1-C-B,footslope,canopy,20,25,5.0 R,10,0,,159
+Bw1,Y1-1-C-B,footslope,canopy,25,39,2.5Y,3,2,present,159
+Bw2,Y1-1-C-B,footslope,canopy,39,43,2.5Y,3,3,,159
+Bw3,Y1-1-C-B,footslope,canopy,43,48,2.5Y,3,2,,159
+Oi,Y1-1-C-C,footslope,canopy,0,24,5.0 R,10,0,,159
+Oe,Y1-1-C-C,footslope,canopy,24,29,5.0 R,10,0,,159
+Bw1,Y1-1-C-C,footslope,canopy,29,35,2.5Y,3,2,present,159
+Bw2,Y1-1-C-C,footslope,canopy,35,40,10YR,3,2,,159
+Bw3,Y1-1-C-C,footslope,canopy,40,45,10YR,2,2,,159
+Oi,Y1-2-C-A,low_backslope,canopy,0,24,5.0 R,10,0,,174
+Oe/Oa,Y1-2-C-A,low_backslope,canopy,24,26,5.0 R,10,0,,174
+A,Y1-2-C-A,low_backslope,canopy,26,40,10YR,2,1,,174
+Bw1,Y1-2-C-A,low_backslope,canopy,40,45,2.5Y,4,2,,174
+Bw2,Y1-2-C-A,low_backslope,canopy,45,49,2.5Y,4,2,,174
+Oi,Y1-2-C-B,low_backslope,canopy,0,19,5.0 R,10,0,,174
+Bw,Y1-2-C-B,low_backslope,canopy,19,44,2.5Y,3,2,,174
+Oi,Y1-2-C-C,low_backslope,canopy,0,21,5.0 R,10,0,,174
+Bw1,Y1-2-C-C,low_backslope,canopy,21,38,10YR,3,1,,174
+Bw2,Y1-2-C-C,low_backslope,canopy,38,41,2.5Y,4,2,,174
+Bw3,Y1-2-C-C,low_backslope,canopy,41,45,2.5Y,3,2,,174
+Oi,Y1-2-O-A,low_backslope,open,0,23,5.0 R,10,0,,174
+Bw1,Y1-2-O-A,low_backslope,open,23,35,2.5Y,3,2,,174
+Bw2,Y1-2-O-A,low_backslope,open,35,39,2.5Y,4,2,,174
+Bw3,Y1-2-O-A,low_backslope,open,39,42,2.5Y,4,2,,174
+Oi,Y1-2-O-B,low_backslope,open,0,29,5.0 R,10,0,,174
+Bw1/Oi,Y1-2-O-B,low_backslope,open,29,40,2.5Y,3,2,,174
+Bw2,Y1-2-O-B,low_backslope,open,40,44,2.5Y,3,2,,174
+Bw3,Y1-2-O-B,low_backslope,open,44,48,2.5Y,3,3,,174
+Oi,Y1-2-O-C,low_backslope,open,0,21,5.0 R,10,0,,174
+Oe,Y1-2-O-C,low_backslope,open,21,30,5.0 R,10,0,,174
+Bw1,Y1-2-O-C,low_backslope,open,30,43,2.5Y,3,1,,174
+Bw2,Y1-2-O-C,low_backslope,open,43,48,2.5Y,3,2,,174
+Oi,Y1-3-C-A,backslope,canopy,0,26,5.0 R,10,0,,179
+C,Y1-3-C-A,backslope,canopy,26,49,10YR,4,1,,179
+Oi,Y1-3-C-B,backslope,canopy,0,28,5.0 R,10,0,,179
+C,Y1-3-C-B,backslope,canopy,28,50,2.5Y,4,2,,179
+Oi,Y1-3-C-C,backslope,canopy,0,22,5.0 R,10,0,,179
+C,Y1-3-C-C,backslope,canopy,22,44,2.5Y,4,1,,179
+Oi1,Y1-3-O-A,backslope,open,0,11,5.0 R,10,0,,179
+Oi2,Y1-3-O-A,backslope,open,11,19,5.0 R,10,0,,179
+Bw,Y1-3-O-A,backslope,open,19,46,2.5Y,3,2,,179
+Oi1,Y1-3-O-B,backslope,open,0,12,5.0 R,10,0,,179
+Oi2,Y1-3-O-B,backslope,open,12,16,5.0 R,10,0,,179
+A,Y1-3-O-B,backslope,open,16,36,10YR,2,1,,179
+Bw1,Y1-3-O-B,backslope,open,36,48,2.5Y,3,3,,179
+C1,Y1-3-O-B,backslope,open,48,53,2.5Y,4,1,,179
+C2,Y1-3-O-B,backslope,open,53,57,2.5Y,3,2,,179
+Oi1,Y1-3-O-C,backslope,open,0,9,5.0 R,10,0,,179
+Oi2,Y1-3-O-C,backslope,open,9,19,5.0 R,10,0,,179
+A,Y1-3-O-C,backslope,open,19,30,10YR,2,1,,179
+Bw1,Y1-3-O-C,backslope,open,30,42,2.5Y,4,3,,179
+Bw2,Y1-3-O-C,backslope,open,42,60,2.5Y,4,4,,179
