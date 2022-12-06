@@ -19,40 +19,42 @@ pedon2 =
   pedon_load %>%   
   separate(id, sep = "-", into = c("proj", "slope_num",
                                    "cover", "rep")) %>%
-  mutate(slopepos = recode(slopepos, "low_backslope" = "low backslope")) %>% 
+  mutate(slopepos = recode(slopepos, "low_backslope" = "low backslope")) %>%
+  mutate(cover_type = str_replace_all(cover_type, "canopy", "closed")) %>% 
   mutate(cover_type2 = paste(cover_type, rep),
-         cover_type3 = paste(slopepos, cover_type, rep))
+         cover_type3 = paste(slopepos, cover_type, rep))  
+  
 
-
-#look at first several lines of imported file
-head(pedon)
-
-#double-check structure of the data
-str(pedon)
-
-#gives the class of the object
-class(pedon)
-
-#create new column for hex color and convert munsell color to hex format
-pedon$soilcolor <- munsell2rgb(pedon$hue, pedon$value, pedon$chroma)
-
-
-#double-check new "soil color" column
-print(pedon)
-
-#convert to apq object "soil profile collection"
-depths(pedon) <- id ~ top + bottom
-
-
-#check the new class
-str(pedon)
-
-class(pedon)
-summary(pedon)
-
-
-#plot
-plot(pedon, name = 'horizon', color = 'soilcolor') 
+# 
+# #look at first several lines of imported file
+# head(pedon)
+# 
+# #double-check structure of the data
+# str(pedon)
+# 
+# #gives the class of the object
+# class(pedon)
+# 
+# #create new column for hex color and convert munsell color to hex format
+# pedon$soilcolor <- munsell2rgb(pedon$hue, pedon$value, pedon$chroma)
+# 
+# 
+# #double-check new "soil color" column
+# print(pedon)
+# 
+# #convert to apq object "soil profile collection"
+# depths(pedon) <- id ~ top + bottom
+# 
+# 
+# #check the new class
+# str(pedon)
+# 
+# class(pedon)
+# summary(pedon)
+# 
+# 
+# #plot
+# plot(pedon, name = 'horizon', color = 'soilcolor') 
 
 
 #####
@@ -83,29 +85,45 @@ par(mar=c(0,0,0,0))
     
     plot(pedon_footslope, name = 'horizon', color = 'soilcolor',
          groups = 'cover_type',
-         group.name.offset = c(-10, -15),
-         break.offset = 0.6,
+         # group.name.offset = c(-10, -15),
+         group.name.offset = -10,
+         break.offset = -1,
          name.style = 'center-center',
-         width = 0.3
+         width = 0.3,
+         cex.names = 1.25,
+         axis.line.offset = -13,
+         n = 8
+
+         
 )
+    #save as 900 width, 550 height
+    
     par(mar=c(0,0,0,0))
     
     plot(pedon_backslope, name = 'horizon', color = 'soilcolor',
          groups = 'cover_type',
-         group.name.offset = c(-10, -15),
-         break.offset = 0.6,
+         # group.name.offset = c(-10, -15),
+         group.name.offset = -10,
+         break.offset = -1,
          name.style = 'center-center',
-         width = 0.3
+         width = 0.3,
+         cex.names = 1.25,
+         axis.line.offset = -13,
+         n = 8
     )
   
     par(mar=c(0,0,0,0))
     
     plot(pedon_lowbackslope, name = 'horizon', color = 'soilcolor',
          groups = 'cover_type',
-         group.name.offset = c(-10, -15),
-         break.offset = 0.6,
+         # group.name.offset = c(-10, -15),
+         group.name.offset = -10,
+         break.offset = -1,
          name.style = 'center-center',
-         width = 0.3
+         width = 0.3,
+         cex.names = 1.25,
+         axis.line.offset = -13,
+         n = 8
     )
     
 
