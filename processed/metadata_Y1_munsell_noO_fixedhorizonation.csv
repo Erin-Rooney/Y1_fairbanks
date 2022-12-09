@@ -7,28 +7,28 @@ Bw3,Y1-1-O-A,footslope,open,54,58,2.5Y,3,3,NC,159
 Oi,Y1-1-O-B,footslope,open,0,25,5.0 R,10,0,,159
 Oe,Y1-1-O-B,footslope,open,25,33,5.0 R,10,0,,159
 Oe/Bw,Y1-1-O-B,footslope,open,33,35,10YR,2,2,,159
-Bw1,Y1-1-O-B,footslope,open,35,39,2.5Y,3,3,,159
-Bw2,Y1-1-O-B,footslope,open,39,44,2.5Y,3,2,,159
+Bw,Y1-1-O-B,footslope,open,35,39,2.5Y,3,3,,159
+Bg,Y1-1-O-B,footslope,open,39,44,2.5Y,3,2,,159
 Oi,Y1-1-O-C,footslope,open,0,25,5.0 R,10,0,,159
 Oe,Y1-1-O-C,footslope,open,25,33,5.0 R,10,0,,159
-Bw1,Y1-1-O-C,footslope,open,33,45,2.5Y,3,2,present,159
-Bw2,Y1-1-O-C,footslope,open,45,50,2.5Y,3,3,,159
-Bw3,Y1-1-O-C,footslope,open,50,54,2.5Y,3,2,present,159
+Bg,Y1-1-O-C,footslope,open,33,45,2.5Y,3,2,present,159
+Bw,Y1-1-O-C,footslope,open,45,50,2.5Y,3,3,,159
+Bg',Y1-1-O-C,footslope,open,50,54,2.5Y,3,2,present,159
 Oi,Y1-1-C-A,footslope,canopy,0,23,5.0 R,10,0,,159
 Oe,Y1-1-C-A,footslope,canopy,23,29,5.0 R,10,0,,159
-Bw1,Y1-1-C-A,footslope,canopy,29,38,2.5Y,3,2,,159
-Bw2,Y1-1-C-A,footslope,canopy,38,43,2.5Y,3,2,,159
-Bw3,Y1-1-C-A,footslope,canopy,43,48,2.5Y,5,3,,159
+Bg1,Y1-1-C-A,footslope,canopy,29,38,2.5Y,3,2,,159
+Bg2,Y1-1-C-A,footslope,canopy,38,43,2.5Y,3,2,,159
+Bw,Y1-1-C-A,footslope,canopy,43,48,2.5Y,5,3,,159
 Oi,Y1-1-C-B,footslope,canopy,0,20,5.0 R,10,0,,159
 Oe,Y1-1-C-B,footslope,canopy,20,25,5.0 R,10,0,,159
-Bw1,Y1-1-C-B,footslope,canopy,25,39,2.5Y,3,2,present,159
-Bw2,Y1-1-C-B,footslope,canopy,39,43,2.5Y,3,3,,159
-Bw3,Y1-1-C-B,footslope,canopy,43,48,2.5Y,3,2,,159
+Bg,Y1-1-C-B,footslope,canopy,25,39,2.5Y,3,2,present,159
+Bw1,Y1-1-C-B,footslope,canopy,39,43,2.5Y,3,3,,159
+Bw2,Y1-1-C-B,footslope,canopy,43,48,2.5Y,3,2,,159
 Oi,Y1-1-C-C,footslope,canopy,0,24,5.0 R,10,0,,159
 Oe,Y1-1-C-C,footslope,canopy,24,29,5.0 R,10,0,,159
-Bw1,Y1-1-C-C,footslope,canopy,29,35,2.5Y,3,2,present,159
-Bw2,Y1-1-C-C,footslope,canopy,35,40,10YR,3,2,,159
-Bw3,Y1-1-C-C,footslope,canopy,40,45,10YR,2,2,,159
+Bg,Y1-1-C-C,footslope,canopy,29,35,2.5Y,3,2,present,159
+Bw,Y1-1-C-C,footslope,canopy,35,40,10YR,3,2,,159
+Bg',Y1-1-C-C,footslope,canopy,40,45,10YR,2,2,,159
 Oi,Y1-2-C-A,low_backslope,canopy,0,24,5.0 R,10,0,,174
 Oe/Oa,Y1-2-C-A,low_backslope,canopy,24,26,5.0 R,10,0,,174
 A,Y1-2-C-A,low_backslope,canopy,26,40,10YR,2,1,,174
@@ -64,7 +64,7 @@ Bw,Y1-3-O-A,backslope,open,19,46,2.5Y,3,2,,179
 Oi1,Y1-3-O-B,backslope,open,0,12,5.0 R,10,0,,179
 Oi2,Y1-3-O-B,backslope,open,12,16,5.0 R,10,0,,179
 A,Y1-3-O-B,backslope,open,16,36,10YR,2,1,,179
-Bw1,Y1-3-O-B,backslope,open,36,48,2.5Y,3,3,,179
+Bw,Y1-3-O-B,backslope,open,36,48,2.5Y,3,3,,179
 C1,Y1-3-O-B,backslope,open,48,53,2.5Y,4,1,,179
 C2,Y1-3-O-B,backslope,open,53,57,2.5Y,3,2,,179
 Oi1,Y1-3-O-C,backslope,open,0,9,5.0 R,10,0,,179

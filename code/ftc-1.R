@@ -46,7 +46,38 @@ fairbanks_ftc_combined =
   mutate(date_time = mdy_hm(date_time)) %>% 
   pivot_wider(names_from = 'cover_type', values_from = "temperature_C") %>% 
   pivot_longer(-c(date_time, depth), names_to = 'cover_type', values_to = 'temperature_C') %>% 
-  filter(date_time > "2020-06-01 00:00:00")
+  filter(date_time > "2020-06-01 00:00:00") %>% 
+  mutate(months_go = date_time) %>% 
+  separate(months_go, sep = " ", into = c("date", "time")) %>% 
+  separate(date, sep = "-", into = c("year", "month", "day")) %>% 
+  mutate(month = recode(month, "01" = "january", "02" = "february", 
+                        "03" = "march", "04" = "april", "05" = "may", 
+                        "06" = "june", "07" = "july", "08" = "august",
+                        "09" = "september", "10" = "october", "11" = "november",
+                        "12" = "december")) %>% 
+  dplyr::mutate(season_go = case_when(grepl("june", month)~"summer",
+                                      grepl("july", month)~"summer",
+                                      grepl("august", month)~"summer",
+                                      grepl("september", month)~"fall",
+                                      grepl("october", month)~"fall",
+                                      grepl("november", month)~"fall",
+                                      grepl("december", month)~"winter",
+                                      grepl("january", month)~"winter",
+                                      grepl("february", month)~"winter",
+                                      grepl("march", month)~"spring",
+                                      grepl("april", month)~"spring",
+                                      grepl("may", month)~"spring"))
+                                      
+                                       
+                                       
+                                       
+summary =
+  fairbanks_ftc_combined %>% 
+  group_by(depth, cover_type, season_go) %>% 
+  na.omit() %>% 
+  dplyr::summarise(max = max(temperature_C),
+                   min = min(temperature_C),
+                   mean = mean(temperature_C)) 
 
   #fairbanks_ftc_combined$date <- as.Date(fairbanks_ftc_combined$date)
 

@@ -74,6 +74,7 @@ pedon2$soilcolor <- munsell2rgb(pedon2$hue, pedon2$value, pedon2$chroma)
 
 #convert to apq object "soil profile collection"
 depths(pedon_footslope) <- cover_type2 ~ top + bottom
+
 depths(pedon_backslope) <- cover_type2 ~ top + bottom
 depths(pedon_lowbackslope) <- cover_type2 ~ top + bottom
 depths(pedon2) <- cover_type3 ~ top + bottom
