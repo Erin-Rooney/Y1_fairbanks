@@ -50,3 +50,18 @@ summary.aov(pH_aov)
 pH_hsd <- HSD.test(pH_aov, "slopepos")
 print(pH_hsd)
 
+pH_hsd <- HSD.test(pH_aov, "cover_type")
+print(pH_hsd)
+
+
+#####
+
+pH_aov <- aov(pH ~ cover_type, data = pH_stats %>% filter(slopepos == "footslope"))
+summary.aov(pH_aov)
+
+pH_hsd <- HSD.test(pH_aov, "slopepos")
+print(pH_hsd)
+
+pH_hsd <- HSD.test(pH_aov, "cover_type")
+print(pH_hsd)
+

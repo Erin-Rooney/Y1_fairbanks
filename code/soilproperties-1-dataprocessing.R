@@ -19,8 +19,7 @@ om_data_processed =
                    om_se = round(sd(depth)/sqrt(n()),1),
                    om_min = round(min(depth),1),
                    om_max = round(max(depth),1),
-                   om_max_min = ((om_max+om_min)/2))
-                  ) %>% 
+                   om_max_min = ((om_max+om_min)/2)) %>% 
   mutate(om_summary = paste(om_mean, "\u00b1", om_se)) %>% 
   select(-c(om_mean, om_se))
 
@@ -28,6 +27,7 @@ om_data_processed =
 om_data_processed %>% knitr::kable()
 
 write.csv(om_data_processed, "output/om_data_processed.csv", row.names = FALSE)
+
 
 
 # 4. Figures
@@ -75,22 +75,25 @@ library(nlme)
 soil_properties_stats =
   soil_data %>% 
   #filter(cover_type %in% "Canopy") %>% 
-  select(c(slopepos, cover_type, grav, LOI, Horizonation)) %>% 
+  select(c(slopepos, cover_type, grav, LOI, Horizonation)) 
   
   
 
 LOI_aov <- aov(LOI ~ slopepos*cover_type, data = soil_properties_stats)
 summary.aov(LOI_aov)
 
+
 LOI_slopepos_hsd = HSD.test(LOI_aov, "slopepos")
 print(LOI_slopepos_hsd)
 
+LOI_slopepos_hsd = HSD.test(LOI_aov, "cover_type")
+print(LOI_slopepos_hsd)
 #
 
-LOI2_aov <- aov(LOI ~ slopepos, data = soil_properties_stats)
+LOI2_aov <- aov(LOI ~ cover_type, data = soil_properties_stats %>%  filter(slopepos == "Backslope"))
 summary.aov(LOI2_aov)
 
-LOI2_slopepos_hsd = HSD.test(LOI2_aov, "slopepos")
+LOI2_slopepos_hsd = HSD.test(LOI2_aov, "cover_type")
 print(LOI2_slopepos_hsd)
 
 
@@ -110,6 +113,22 @@ summary.aov(grav_aov)
 
 grav_slopepos_hsd = HSD.test(grav_aov, "slopepos")
 print(grav_slopepos_hsd)
+
+grav_slopepos_hsd = HSD.test(grav_aov, "cover_type")
+print(grav_slopepos_hsd)
+
+#
+
+# 
+# 
+# grav_aov <- aov(grav ~ cover_type, data = soil_properties_stats %>%  filter(slopepos == "Backslope"))
+# summary.aov(grav_aov)
+# 
+# grav_slopepos_hsd = HSD.test(grav_aov, "slopepos")
+# print(grav_slopepos_hsd)
+# 
+# grav_slopepos_hsd = HSD.test(grav_aov, "cover_type")
+# print(grav_slopepos_hsd)
 
 #
 
