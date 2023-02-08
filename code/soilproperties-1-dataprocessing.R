@@ -97,7 +97,7 @@ LOI2_slopepos_hsd = HSD.test(LOI2_aov, "cover_type")
 print(LOI2_slopepos_hsd)
 
 
-LOI_interaction = lme(LOI ~ slopepos, random = ~1|Horizonation, na.action = na.omit, data = soil_properties_stats)
+LOI_interaction = lme(LOI ~ slopepos*cover_type, random = ~1|Horizonation, na.action = na.omit, data = soil_properties_stats)
 
 summary(LOI_interaction)
 print(LOI_interaction)
