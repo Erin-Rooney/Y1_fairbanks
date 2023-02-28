@@ -1,9 +1,4 @@
-{
-  "schemaVersion": 1,
-  "label": "In Review",
-  "message": "PPP",
-  "color": "blue"
-}
+https://img.shields.io/static/v1?label=<LABEL>&message=<MESSAGE>&color=<COLOR>
 
 ### Topography and canopy cover influence soil carbon composition and distribution across a forested hillslope in the discontinuous permafrost zone. 
 
