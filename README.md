@@ -1,4 +1,4 @@
-https://img.shields.io/badge/<In Review>-<Permafrost and Periglacial Processes SI>-<lightblue>
+https://img.shields.io/badge/<In Review>-<Permafrost and Periglacial Processes SI>-<blue>
 
 ### Topography and canopy cover influence soil carbon composition and distribution across a forested hillslope in the discontinuous permafrost zone. 
 
