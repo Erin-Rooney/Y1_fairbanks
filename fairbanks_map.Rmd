@@ -1,0 +1,137 @@
+---
+title: "Fairbanks Map"
+author: "Erin C Rooney"
+date: "2023-03-06"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Fairbanks Map
+
+### this script uses data provided by  NCEAS Arctic Data Center training course
+### Reproducible practices for Arctic Research Using R
+
+derived from: Jared Kibele and Jeanette Clark. 2018. State of Alaska’s Salmon and People Regional Boundaries. Knowledge Network for Biocomplexity. doi:10.5063/F1125QWP.
+
+
+```{r}
+source("code/FTICR-0-packages.R")
+library(sf)
+library(leaflet)
+library(scales)
+library(ggmap)
+library(grid)
+library(ggsn)
+
+```
+
+```{r}
+
+ak_regions = read_sf("NCEAS/ak_regions_simp.shp")
+st_crs(ak_regions)
+
+ak_regions_3338 =
+  ak_regions %>%
+  st_transform(crs = 3338)
+st_crs(ak_regions_3338)
+
+
+```
+
+```{r}
+
+site_gps = read.csv("rawdata/site_gps.csv")
+
+#pop = read.csv("NCEAS/alaska_population.csv")
+
+
+site_gps_4326= st_as_sf(site_gps, 
+                  coords = c('lng', 'lat'),
+                  crs = 4326,
+                  remove = F)
+
+site_gps_3338 = st_transform(site_gps_4326, crs = 3338)
+
+gps_joined = 
+  st_join(site_gps_3338, ak_regions_3338, join = st_within)
+head(gps_joined)
+
+
+
+rivers_3338 = read_sf("NCEAS/ak_rivers_simp.shp")
+st_crs(rivers_3338)
+
+```
+
+## Alaska plot
+
+```{r}
+
+
+ak_map_fig =
+  ggplot()+
+  geom_sf(data = ak_regions_3338, aes(), fill = "#84a98c")+
+    geom_sf(data = gps_joined, aes(x = lat, y = lng), shape = 21, fill = "#ffb703", size = 5)+
+  #scale_fill_continuous(low = "#6d6875", high = "#ffcdb2", labels = comma)+
+    labs(y = " ", x = " ")+
+  theme_minimal()+
+   scalebar(ak_regions_3338, location = "bottomright", dist = 500, height = 0.05, transform = FALSE, model = "WGS84", dist_unit = "km", st.size = 3,
+            border.size = 0.05)
+
+ggsave("output/ak_map_fig.tiff", plot = ak_map_fig, height = 8, width = 8)
+
+
+```
+
+
+## zoomed in site map
+```{r}
+source("code/ggbounding_function_NCEAS.R")
+
+bbox = c(-147.848, 64.863, -147.838, 64.866) #roughly fairbanks
+ak_map = get_stamenmap(bbox, zoom = 15, maptype = c("terrain"))
+ak_map_3857 = ggmap_bbox_to_3857(ak_map)
+
+library(tibble)
+
+ak_legend_box = 
+  tribble(
+  ~lng, ~lat,
+ -147.845, 64.8633,
+   -147.839, 64.866)
+
+
+
+ak_legend_box_4326 = st_as_sf(ak_legend_box, 
+                  coords = c('lng', 'lat'),
+                  crs = 4326,
+                  remove = F)
+
+ak_legend_box_3857 =
+  ak_legend_box_4326 %>% 
+  st_transform(crs = 3857)
+
+gps_3857 =
+  site_gps_3338 %>% 
+  st_transform(crs = 3857) %>% 
+    mutate(site = factor (site, levels = c("backslope", "low backslope", "footslope"))) 
+
+zoom_sitemap = 
+  ggmap(ak_map_3857)+
+  geom_sf(data = gps_3857, aes(fill = site), size = 5, shape = 21, inherit.aes = F)+
+    scale_fill_manual(values = rev(pnw_palette("Bay", 3)))+
+  labs(y = " ", x = " ")+
+  theme_minimal()+
+  scalebar(ak_legend_box_3857, location = "bottomright", dist = 200, height = 0.03, transform = FALSE, model = "WGS84", dist_unit = "m", st.size = 3, border.size = 0.05)
+  
+
+ggsave("output/zoom_sitemap.tiff", plot = zoom_sitemap, height = 5, width = 6)
+
+   # scale_color_continuous(low = "#6d6875", high = "#ffcdb2", labels = comma)
+
+
+```
+

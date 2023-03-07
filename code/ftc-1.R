@@ -104,6 +104,89 @@ fairbanks_temperature =
 ggsave("output/fairbanks_temperature.tiff", plot = fairbanks_temperature, height = 6.6, width = 10)
 
 
+
+fairbanks_temperature_ftcexample = 
+  fairbanks_ftc_combined %>% 
+  filter(date_time >= "2021-09-13 6:00:00" & cover_type == "closed" &
+           depth == 5) %>% 
+  ggplot(aes(x = date_time, y = temperature_C, color = cover_type))+
+  geom_line(size = 0.9)+
+  labs(x = "", 
+       y = "temperature, celsius")+
+  geom_hline(yintercept = 0, color = "black", linetype = "longdash")+
+  # geom_hline(yintercept = 2, color = "grey", linetype = "shortdash")+
+  #geom_hline(yintercept = -2, color = "grey", linetype = "shortdash")+
+  scale_x_datetime( breaks=("1 day"), 
+                    labels=date_format("%b-%d"), 
+                    timezone = "UTC-9:00") + 
+  #scale_color_manual(values = PNWColors::pnw_palette("Bay", 2))+
+  scale_color_manual(values = c('#9d8189'))+
+  # facet_grid(depth ~., scales = "free_y", 
+  #            labeller = as_labeller(c('5' = "5 cm", '75' = "75 cm"))) +
+  theme_er()+
+    theme(legend.position = "none", panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+          panel.background = element_blank(), axis.text.x = element_text (angle = 45, size = 9, hjust = 1))
+
+fairbanks_temperature_ftcexample_lineonly = 
+  fairbanks_ftc_combined %>% 
+  filter(date_time >= "2021-09-13 6:00:00" & cover_type == "closed" &
+           depth == 5) %>% 
+  ggplot(aes(x = date_time, y = temperature_C, color = cover_type))+
+  geom_line(size = 0.9)+
+  labs(x = "", 
+       y = "")+
+  geom_hline(yintercept = 0, color = "#E4A8BC", linetype = "longdash")+
+  # geom_hline(yintercept = 2, color = "grey", linetype = "shortdash")+
+  #geom_hline(yintercept = -2, color = "grey", linetype = "shortdash")+
+  scale_x_datetime( breaks=("1 day"), 
+                    labels=date_format("%b-%d"), 
+                    timezone = "UTC-9:00") + 
+  #scale_color_manual(values = PNWColors::pnw_palette("Bay", 2))+
+  scale_color_manual(values = c('black'))+
+  # facet_grid(depth ~., scales = "free_y", 
+  #            labeller = as_labeller(c('5' = "5 cm", '75' = "75 cm"))) +
+  theme_er()+
+  theme(legend.position = "none", panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        strip.text = element_blank(),
+        axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        panel.border = element_blank(),
+        panel.background = element_blank(),
+        plot.background = element_blank()
+        
+  )
+
+
+ggsave("output/fairbanks_temperature_ftcexample_lineonly.png", plot = fairbanks_temperature_ftcexample_lineonly, height = 3.5, width = 10)
+
+
+
+fairbanks_temperature_ftcexample2 = 
+  fairbanks_ftc_combined %>% 
+  filter(date_time >= "2021-09-14 6:00:00" & date_time <= "2021-09-16 6:00:00" & cover_type == "closed" &
+           depth == 5) %>% 
+  ggplot(aes(x = date_time, y = temperature_C, color = cover_type))+
+  geom_line(size = 0.9)+
+  labs(x = "", 
+       y = "temperature, celsius")+
+  geom_hline(yintercept = 0, color = "black", linetype = "longdash")+
+  # geom_hline(yintercept = 2, color = "grey", linetype = "shortdash")+
+  #geom_hline(yintercept = -2, color = "grey", linetype = "shortdash")+
+  scale_x_datetime( breaks=("6 hours"), 
+                    labels=date_format("%r"), 
+                    timezone = "UTC-9:00") + 
+  #scale_color_manual(values = PNWColors::pnw_palette("Bay", 2))+
+  scale_color_manual(values = c('#9d8189'))+
+  # facet_grid(depth ~., scales = "free_y", 
+  #            labeller = as_labeller(c('5' = "5 cm", '75' = "75 cm"))) +
+  theme_er()+
+  theme(legend.position = "none", panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.text.x = element_text (angle = 45, size = 9, hjust = 1))
+
+
+ggsave("output/fairbanks_temperature_ftcexample2.png", plot = fairbanks_temperature_ftcexample2, height = 4.5, width = 6)
+
+
 ###FTC time
 
 library(purrr)
