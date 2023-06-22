@@ -1,6 +1,6 @@
 ![(https://img.shields.io/badge/Accepted-Permafrost%20and%20Periglacial%20Processes-9cf.svg)](https://img.shields.io/badge/Accepted-Permafrost%20and%20Periglacial%20Processes-9cf.svg)
 
-### Topography and canopy cover influence soil carbon composition and distribution across a forested hillslope in the discontinuous permafrost zone. 
+### Topography and canopy cover influence soil organic carbon composition and distribution across a forested hillslope in the discontinuous permafrost zone. 
 
 ##### Erin C. Rooney, Vanessa L. Bailey, Kaizad F. Patel, Alexander Kholodov, Holly Golightly, Rebecca A. Lybrand
 
