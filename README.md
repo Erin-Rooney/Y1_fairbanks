@@ -4,9 +4,11 @@
 
 ##### Erin C. Rooney, Vanessa L. Bailey, Kaizad F. Patel, Alexander Kholodov, Holly Golightly, Rebecca A. Lybrand
 
-##### *In Review with Permafrost and Periglacial Processes Special Issue , July 23, 2022*
+##### *Accepted in Permafrost and Periglacial Processes Special Issue , July 23, 2022*
 
-![Y1_sitepicture](https://user-images.githubusercontent.com/61806923/180624572-ec0a8327-a769-4e67-8c19-7c2749fc18ce.png)
+![Hillslope Illustration 032423](https://github.com/Erin-Rooney/Y1_fairbanks/assets/61806923/44f66f7b-fd5d-4a3a-954d-e238e4641326)
+
+Illustration by Rob Riedel. Copyright 2023 The Regents of the University of California, Davis campus. All rights reserved.
 
 *All code should be able to be run without changing working directories. Please contact me if you find any issues or errors.*
 
