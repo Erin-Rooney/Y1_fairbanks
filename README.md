@@ -1,4 +1,4 @@
-![(https://img.shields.io/badge/In%20Review-Permafrost%20and%20Periglacial%20Processes-9cf.svg)](https://img.shields.io/badge/In%20Review-Permafrost%20and%20Periglacial%20Processes-9cf.svg)
+![(https://img.shields.io/badge/Accepted-Permafrost%20and%20Periglacial%20Processes-9cf.svg)](https://img.shields.io/badge/In%20Review-Permafrost%20and%20Periglacial%20Processes-9cf.svg)
 
 ### Topography and canopy cover influence soil carbon composition and distribution across a forested hillslope in the discontinuous permafrost zone. 
 
@@ -12,4 +12,4 @@ Illustration by Rob Riedel. Copyright 2023 The Regents of the University of Cali
 
 *All code should be able to be run without changing working directories. Please contact me if you find any issues or errors.*
 
-#### Funding by PNNL-EMSL Science Theme, Collaboration with SOMMOS/NEON
+#### Funding by PNNL-EMSL Science Theme, NSF Office of Polar Programs 
