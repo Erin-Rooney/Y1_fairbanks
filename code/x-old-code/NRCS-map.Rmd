@@ -1,0 +1,96 @@
+---
+title: "nrcs_map"
+author: "Erin C Rooney"
+date: "`r Sys.Date()`"
+output: html_document
+---
+---
+title: "Fairbanks Map"
+author: "Erin C Rooney"
+date: "2023-03-06"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Fairbanks Map
+
+### this script uses data provided by  NCEAS Arctic Data Center training course
+### Reproducible practices for Arctic Research Using R
+
+derived from: Jared Kibele and Jeanette Clark. 2018. State of Alaska’s Salmon and People Regional Boundaries. Knowledge Network for Biocomplexity. doi:10.5063/F1125QWP.
+
+
+```{r}
+source("code/FTICR-0-packages.R")
+library(sf)
+library(leaflet)
+library(scales)
+library(ggmap)
+library(grid)
+library(ggsn)
+
+```
+
+```{r}
+
+ak_regions = read_sf("NCEAS/ak_regions_simp.shp")
+st_crs(ak_regions)
+
+ak_regions_3338 =
+  ak_regions %>%
+  st_transform(crs = 3338)
+st_crs(ak_regions_3338)
+
+
+```
+
+```{r}
+
+site_gps = read.csv("rawdata/site_gps_nrcs.csv")
+
+#pop = read.csv("NCEAS/alaska_population.csv")
+
+
+site_gps_4326= st_as_sf(site_gps, 
+                  coords = c('lng', 'lat'),
+                  crs = 4326,
+                  remove = F)
+
+
+site_gps_3338 = st_transform(site_gps_4326, crs = 3338)
+
+gps_joined = 
+  st_join(site_gps_3338, ak_regions_3338, join = st_within)
+head(gps_joined)
+
+
+
+rivers_3338 = read_sf("NCEAS/ak_rivers_simp.shp")
+st_crs(rivers_3338)
+
+```
+
+## Alaska plot
+
+```{r}
+
+
+ak_map_fig =
+  ggplot()+
+  geom_sf(data = ak_regions_3338, aes(), fill = "#b0c4b1")+
+    geom_sf(data = gps_joined, aes(x = lat, y = lng), shape = 21, fill = "#ffb703", size = 3)+
+  #scale_fill_continuous(low = "#6d6875", high = "#ffcdb2", labels = comma)+
+    labs(y = " ", x = " ")+
+  theme_minimal()+
+   scalebar(ak_regions_3338, location = "bottomright", dist = 500, height = 0.05, transform = FALSE, model = "WGS84", dist_unit = "km", st.size = 3,
+            border.size = 0.05)
+
+ggsave("output/ak_map_fig_nrcs.png", plot = ak_map_fig, height = 12, width = 12)
+
+
+
+```
+
