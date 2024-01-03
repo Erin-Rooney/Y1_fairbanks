@@ -81,14 +81,14 @@ st_crs(rivers_3338)
 ak_map_fig =
   ggplot()+
   geom_sf(data = ak_regions_3338, aes(), fill = "#b0c4b1")+
-    geom_sf(data = gps_joined, aes(x = lat, y = lng), shape = 21, fill = "#ffb703", size = 3)+
+    geom_sf(data = gps_joined, aes(x = lat, y = lng), shape = 21, fill = "#ffb703", size = 5)+
   #scale_fill_continuous(low = "#6d6875", high = "#ffcdb2", labels = comma)+
     labs(y = " ", x = " ")+
   theme_minimal()+
    scalebar(ak_regions_3338, location = "bottomright", dist = 500, height = 0.05, transform = FALSE, model = "WGS84", dist_unit = "km", st.size = 3,
             border.size = 0.05)
 
-ggsave("output/ak_map_fig_nrcs.png", plot = ak_map_fig, height = 12, width = 12)
+ggsave("output/ak_map_fig_nrcs.png", plot = ak_map_fig, height = 9, width = 9)
 
 
 
