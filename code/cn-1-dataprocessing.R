@@ -39,10 +39,10 @@ metadata2 =
 cn_data_tableanalysis =
   cn_data_processed %>% 
   group_by(slopepos, covertype) %>% 
-  dplyr::summarize(C_mean = round(mean(c_perc), 3),
-                   C_se = round(sd(c_perc)/sqrt(n()),3),
-                   N_mean = round(mean(n_perc), 3),
-                   N_se = round(sd(n_perc)/sqrt(n()),3),
+  dplyr::summarize(C_mean = round(mean(c_perc), 2),
+                   C_se = round(sd(c_perc)/sqrt(n()),2),
+                   N_mean = round(mean(n_perc), 2),
+                   N_se = round(sd(n_perc)/sqrt(n()),2),
                    ) %>% 
   mutate(C_summary = paste(C_mean, "\u00b1", C_se),
          N_summary = paste(N_mean, "\u00b1", N_se)) %>% 
@@ -53,10 +53,10 @@ cn_data_tableanalysis_horizonation =
   cn_data_processed %>% 
   left_join(metadata2, by = "sample_num") %>% 
   group_by(slopepos.x, covertype, rep, morph.x) %>% 
-  dplyr::summarize(C_mean = round(mean(c_perc), 3),
-                   C_se = round(sd(c_perc)/sqrt(n()),3),
-                   N_mean = round(mean(n_perc), 3),
-                   N_se = round(sd(n_perc)/sqrt(n()),3),
+  dplyr::summarize(C_mean = round(mean(c_perc), 2),
+                   C_se = round(sd(c_perc)/sqrt(n()),2),
+                   N_mean = round(mean(n_perc), 2),
+                   N_se = round(sd(n_perc)/sqrt(n()),2),
   ) %>% 
   mutate(C_summary = paste(C_mean, "\u00b1", C_se),
          N_summary = paste(N_mean, "\u00b1", N_se)) %>% 

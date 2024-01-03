@@ -67,8 +67,8 @@ xrd_data_tableanalysis =
                         ankerite), names_to = "mineral", values_to = "abundance") %>% 
   #group_by(slopepos, covertype, morph) %>% 
   group_by(slopepos, covertype, mineral) %>% 
-  dplyr::summarize(mean = round(mean(abundance), 3),
-                   se = round(sd(abundance)/sqrt(n()),3)) %>% 
+  dplyr::summarize(mean = round(mean(abundance), 1),
+                   se = round(sd(abundance)/sqrt(n()),1)) %>% 
   mutate(summary = paste(mean, "\u00b1", se)) %>% 
   na.omit()
   #dplyr::select(-mean, -se)
@@ -100,7 +100,7 @@ xrd_data_tableanalysis_horizonation =
   group_by(slopepos.x, covertype, rep, morph.x, mineral) %>% 
   # dplyr::summarize(mean = round(mean(abundance), 3),
   #                  se = round(sd(abundance)/sqrt(n()),3)) %>%
-  dplyr::summarize(mean = round(mean(abundance), 3)) %>% 
+  dplyr::summarize(mean = round(mean(abundance), 1)) %>% 
   # mutate(summary = paste(mean, "\u00b1", se)) %>% 
   na.omit()
 #dplyr::select(-mean, -se)
@@ -130,8 +130,8 @@ xrd_stats =
   pivot_longer(cols = c(quartz, albite, anorthite, microcline, chlorite, mica, hornblende,
                         ankerite), names_to = "mineral", values_to = "abundance") %>% 
   group_by(slopepos, covertype, morph, mineral) %>% 
-  dplyr::summarize(mean = round(mean(abundance), 3),
-                   se = round(sd(abundance)/sqrt(n()),3)) %>% 
+  dplyr::summarize(mean = round(mean(abundance), 1),
+                   se = round(sd(abundance)/sqrt(n()),1)) %>% 
   mutate(value = paste(mean, "\u00b1", se)
          # this will also add " NA" for the blank cells
          # use str_remove to remove the string
@@ -244,7 +244,7 @@ anova(xrd_interaction)
 
 fit_aov = function(dat){
   
-  aov(abundance ~ slopepos, data = dat) %>% 
+  aov(mean ~ slopepos, data = dat) %>% 
     broom::tidy() %>% # convert to clean dataframe
     rename(pvalue = `p.value`) %>% 
     filter(term == "slopepos") %>% 
@@ -258,7 +258,7 @@ fit_aov = function(dat){
 }
 
 fit_hsd = function(dat){
-  a = aov(abundance ~ slopepos, data = dat)
+  a = aov(mean ~ slopepos, data = dat)
   h = HSD.test(a, "slopepos")
   h$groups %>% mutate(slopepos = row.names(.)) %>% 
     rename(label = groups) %>%  
@@ -278,7 +278,7 @@ xrd_table_with_hsd_covertype =
   xrd_data_tableanalysis %>% 
   left_join(xrd_hsd_all) %>%
   # combine the values with the label notation
-  mutate(value = paste(summary, label),
+  mutate(value = paste(summary),
          # this will also add " NA" for the blank cells
          # use str_remove to remove the string
          #value = str_remove(value, " NA")
