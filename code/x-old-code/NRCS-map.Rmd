@@ -80,10 +80,12 @@ st_crs(rivers_3338)
 
 ak_map_fig =
   ggplot()+
-  geom_sf(data = ak_regions_3338, aes(), fill = "#b0c4b1")+
-    geom_sf(data = gps_joined, aes(x = lat, y = lng), shape = 21, fill = "#ffb703", size = 5)+
-  #scale_fill_continuous(low = "#6d6875", high = "#ffcdb2", labels = comma)+
-    labs(y = " ", x = " ")+
+  geom_sf(data = ak_regions_3338, aes(), fill = "#ddbea9")+
+    geom_sf(data = gps_joined, aes(x = lat, y = lng, fill = type, shape = type), #shape = 21, fill = "#ffb703", 
+           color = "black", size = 4)+
+  scale_fill_manual(values = c("#4c956c", "#f07167", "#0081a7"))+
+  scale_shape_manual(values = c(21, 22, 24))+
+    labs(y = " ", x = " ", fill = "", shape = "")+
   theme_minimal()+
    scalebar(ak_regions_3338, location = "bottomright", dist = 500, height = 0.05, transform = FALSE, model = "WGS84", dist_unit = "km", st.size = 3,
             border.size = 0.05)
